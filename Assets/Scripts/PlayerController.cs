@@ -1,25 +1,29 @@
 ﻿using UnityEngine;
-using UnityStandardAssets.Characters.FirstPerson;
 
 namespace ExplosionJumping {
-    [RequireComponent(typeof(RigidbodyFirstPersonController))]
+    [RequireComponent(typeof(RigidbodyFPControllerCustom))]
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour {
 
-        public RigidbodyFirstPersonController charController;
+        public RigidbodyFPControllerCustom charController;
+
+        private Transform playerTransform;
 
         // Use this for initialization
         void Start() {
-            charController = GetComponent<RigidbodyFirstPersonController>();
+            charController = GetComponent<RigidbodyFPControllerCustom>();
+            playerTransform = GetComponent<Transform>();
         }
 
         // Update is called once per frame
         void Update() {
+            Transform camTransform = charController.cam.transform;
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                Debug.Log("ye");
-                Transform camTransform = charController.cam.transform;
                 GameObject rocket = Instantiate(Resources.Load("Prefabs/BasicRocket"), camTransform.position, camTransform.rotation) as GameObject;
                 rocket.GetComponent<Rigidbody>().velocity = camTransform.forward * 10;
+            }
+            if(Input.GetKeyDown(KeyCode.LeftShift)) {
+                charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 10, ForceMode.VelocityChange);
             }
         }
     }
