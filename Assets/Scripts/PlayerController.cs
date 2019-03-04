@@ -23,7 +23,7 @@ namespace ExplosionJumping {
                 rocket.GetComponent<Rigidbody>().velocity = camTransform.forward * 10;
             }
             if(Input.GetKeyDown(KeyCode.LeftShift)) {
-                charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 10, ForceMode.VelocityChange);
+                charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 60, ForceMode.VelocityChange);
             }
         }
     }

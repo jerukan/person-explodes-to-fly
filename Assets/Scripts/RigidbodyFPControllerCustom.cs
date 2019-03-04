@@ -12,13 +12,15 @@ namespace ExplosionJumping {
     public class RigidbodyFPControllerCustom : MonoBehaviour {
         [Serializable]
         public class MovementSettings {
-            public float forwardSpeed = 8.0f;   // Speed when walking forward
+            public float forwardSpeed = 6.0f;   // Speed when walking forward
             public float backwardSpeed = 4.0f;  // Speed when walking backwards
-            public float strafeSpeed = 4.0f;    // Speed when walking sideways
-            public float jumpForce = 30f;
+            public float strafeSpeed = 6.0f;    // Speed when walking sideways
+            public float jumpForce = 5f;
+            public float crouchMultiplier = 0.5f;
+            internal bool crouching;
+            public KeyCode crouchKey = KeyCode.LeftControl;
             public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float currentTargetSpeed = 8f;
-
 
             public void UpdateDesiredTargetSpeed(Vector2 input) {
                 if (input == Vector2.zero) {
@@ -37,9 +39,14 @@ namespace ExplosionJumping {
                     //handled last as if strafing and moving forward at the same time forwards speed should take precedence
                     currentTargetSpeed = forwardSpeed;
                 }
+                if(Input.GetKey(crouchKey)) {
+                    currentTargetSpeed *= crouchMultiplier;
+                    crouching = true;
+                } else {
+                    crouching = false;
+                }
             }
         }
-
 
         [Serializable]
         public class AdvancedSettings {
@@ -49,11 +56,13 @@ namespace ExplosionJumping {
             public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
 
-
         public Camera cam;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
+
+        public float height = 1.6f;
+        public float radius = 0.5f;
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
@@ -78,8 +87,9 @@ namespace ExplosionJumping {
             capsuleCollider = GetComponent<CapsuleCollider>();
             cam = Camera.main;
             mouseLook.Init(transform, cam.transform);
+            capsuleCollider.radius = radius;
+            capsuleCollider.height = height;
         }
-
 
         private void Update() {
             RotateView();
@@ -89,12 +99,16 @@ namespace ExplosionJumping {
             }
         }
 
-
         private void FixedUpdate() {
             GroundCheck();
             Vector2 input = GetInput();
 
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && grounded) {
+                if(movementSettings.crouching) {
+                    capsuleCollider.height = height * 0.5f;
+                } else {
+                    capsuleCollider.height = height;
+                }
                 // always move along the camera forward as it is the direction that it being aimed at
                 Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
                 desiredMove = Vector3.ProjectOnPlane(desiredMove, groundContactNormal).normalized;
@@ -116,7 +130,7 @@ namespace ExplosionJumping {
                 if (jump) {
                     rigidBody.drag = 0f;
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-                    rigidBody.AddForce(new Vector3(0f, movementSettings.jumpForce, 0f), ForceMode.Impulse);
+                    rigidBody.AddForce(new Vector3(0f, movementSettings.jumpForce, 0f), ForceMode.VelocityChange);
                     jumping = true;
                 }
 
@@ -133,12 +147,10 @@ namespace ExplosionJumping {
             jump = false;
         }
 
-
         private float SlopeMultiplier() {
             float angle = Vector3.Angle(groundContactNormal, Vector3.up);
             return movementSettings.slopeCurveModifier.Evaluate(angle);
         }
-
 
         private void StickToGroundHelper() {
             RaycastHit hitInfo;
@@ -151,9 +163,9 @@ namespace ExplosionJumping {
             }
         }
 
-
         private Vector2 GetInput() {
 
+            // raw axis makes keyboard actually work properly
             Vector2 input = new Vector2 {
                 x = CrossPlatformInputManager.GetAxisRaw("Horizontal"),
                 y = CrossPlatformInputManager.GetAxisRaw("Vertical")
@@ -162,9 +174,8 @@ namespace ExplosionJumping {
             return input;
         }
 
-
         private void RotateView() {
-            //avoids the mouse looking if the game is effectively paused
+            // avoids the mouse looking if the game is effectively paused
             if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
 
             // get the rotation before it's changed
@@ -172,11 +183,9 @@ namespace ExplosionJumping {
 
             mouseLook.LookRotation(transform, cam.transform);
 
-            if (grounded) {
-                // Rotate the rigidbody velocity to match the new direction that the character is looking
-                Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
-                rigidBody.velocity = velRotation * rigidBody.velocity;
-            }
+            // Rotate the rigidbody velocity to match the new direction that the character is looking
+            Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
+            rigidBody.velocity = velRotation * rigidBody.velocity;
         }
 
         /// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom

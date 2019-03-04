@@ -313,7 +313,7 @@ MonoBehaviour:
     forwardSpeed: 6
     backwardSpeed: 4
     strafeSpeed: 6
-    jumpForce: 40
+    jumpForce: 5
     slopeCurveModifier:
       serializedVersion: 2
       m_Curve:
@@ -360,7 +360,6 @@ MonoBehaviour:
   advancedSettings:
     groundCheckDistance: 0.01
     stickToGroundHelperDistance: 0.5
-    slowDownRate: 10
     shellOffset: 0
 --- !u!114 &114391502314979226
 MonoBehaviour:
