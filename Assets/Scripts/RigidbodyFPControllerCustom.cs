@@ -17,6 +17,7 @@ namespace ExplosionJumping {
             public float backwardSpeed = 4.0f;  // Speed when walking backwards
             public float strafeSpeed = 6.0f;    // Speed when walking sideways
             public float jumpForce = 5f;
+            public float airAcceleration = 1f;
             public float crouchMultiplier = 0.5f;
             internal bool crouching;
             public KeyCode crouchKey = KeyCode.LeftControl;
@@ -106,23 +107,21 @@ namespace ExplosionJumping {
             Vector2 input = GetInput();
 
             if (Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) {
+                Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
                 if (grounded) {
                     // always move along the camera forward as it is the direction that it being aimed at
-                    Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
                     desiredMove = Vector3.ProjectOnPlane(desiredMove, groundContactNormal).normalized;
+                    desiredMove = desiredMove * movementSettings.currentTargetSpeed;
 
-                    desiredMove.x = desiredMove.x * movementSettings.currentTargetSpeed;
-                    desiredMove.z = desiredMove.z * movementSettings.currentTargetSpeed;
-                    desiredMove.y = desiredMove.y * movementSettings.currentTargetSpeed;
                     if (rigidBody.velocity.sqrMagnitude <
                         (movementSettings.currentTargetSpeed * movementSettings.currentTargetSpeed)) {
                         rigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.VelocityChange);
-                    }
-                    else {
+                    } else {
                         rigidBody.velocity = desiredMove;
                     }
                 } else {
-                    
+                    desiredMove = Vector3.ProjectOnPlane(desiredMove, Vector3.up).normalized;
+                    rigidBody.AddForce(desiredMove * movementSettings.airAcceleration, ForceMode.Acceleration);
                 }
             }
 
@@ -206,13 +205,11 @@ namespace ExplosionJumping {
         }
 
         private void OnCollisionEnter(Collision collision) {
-            foreach(ContactPoint p in collision.contacts) {
-                Debug.Log(p);
-            }
+            normalCollisions[collision.collider] = collision.contacts[0].normal; // 1 point of contact and its normal is sufficient.
         }
 
         private void OnCollisionStay(Collision collision) {
-            
+            normalCollisions[collision.collider] = collision.contacts[0].normal; // 1 point of contact and its normal is sufficient.
         }
 
         private void OnCollisionExit(Collision collision) {

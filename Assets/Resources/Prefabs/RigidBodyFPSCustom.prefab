@@ -314,6 +314,7 @@ MonoBehaviour:
     backwardSpeed: 2
     strafeSpeed: 4
     jumpForce: 5
+    airAcceleration: 3
     crouchMultiplier: 0.5
     crouchKey: 306
     slopeCurveModifier:
