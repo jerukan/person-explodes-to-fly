@@ -310,10 +310,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 20391502722244772}
   movementSettings:
-    forwardSpeed: 6
-    backwardSpeed: 4
-    strafeSpeed: 6
+    forwardSpeed: 4
+    backwardSpeed: 2
+    strafeSpeed: 4
     jumpForce: 5
+    crouchMultiplier: 0.5
+    crouchKey: 306
     slopeCurveModifier:
       serializedVersion: 2
       m_Curve:
@@ -327,7 +329,7 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0
+        time: 69.80423
         value: 1
         inSlope: 0
         outSlope: 0
@@ -361,6 +363,8 @@ MonoBehaviour:
     groundCheckDistance: 0.01
     stickToGroundHelperDistance: 0.5
     shellOffset: 0
+  height: 1.6
+  radius: 0.5
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -372,7 +376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ecfcbec545648de989f05f61c024d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charController: {fileID: 0}
 --- !u!124 &124986116910727402
 Behaviour:
   m_ObjectHideFlags: 1

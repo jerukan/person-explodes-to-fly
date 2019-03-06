@@ -799,20 +799,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114081812441207190, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 2}
-      propertyPath: advancedSettings.slowDownRate
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114081812441207190, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 2}
-      propertyPath: movementSettings.slopeCurveModifier.m_Curve.Array.data[1].time
-      value: 69.80423
-      objectReference: {fileID: 0}
-    - target: {fileID: 114081812441207190, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 2}
-      propertyPath: movementSettings.slopeCurveModifier.m_Curve.Array.data[1].value
-      value: 1
+    - target: {fileID: 1830071249688946, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}

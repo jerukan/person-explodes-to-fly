@@ -2,15 +2,23 @@
 using System.Collections;
 
 namespace ExplosionJumping {
+    [RequireComponent(typeof(ExplosiveProjectileController))]
     public class ExplosiveProjectileTrigger : MonoBehaviour {
-        // Use this for initialization
-        void Start() {
 
+        protected ExplosiveProjectileController projectileController;
+
+        // Use this for initialization
+        private void Start() {
+            projectileController = GetComponent<ExplosiveProjectileController>();
         }
 
         // Update is called once per frame
-        void Update() {
+        private void Update() {
 
+        }
+
+        protected void Trigger() {
+            projectileController.Explode();
         }
     }
 }

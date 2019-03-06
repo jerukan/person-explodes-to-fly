@@ -21,7 +21,9 @@ GameObject:
   - component: {fileID: 4420715522657468}
   - component: {fileID: 54330024509538416}
   - component: {fileID: 114520521469386868}
-  m_Layer: 0
+  - component: {fileID: 65961905173126602}
+  - component: {fileID: 114772612212761884}
+  m_Layer: 10
   m_Name: BasicRocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +55,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290245525039842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.8, y: 0.78, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4677955288707786}
@@ -130,6 +132,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!65 &65961905173126602
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1290245525039842}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.18872178, y: 0.18880439, z: 0.37900752}
+  m_Center: {x: -0.00008350611, y: -0.0027589798, z: 0.0008978024}
 --- !u!114 &114520521469386868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -141,13 +155,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20188c84730b4880ac1eb018a7ca01d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionForce: 0
-  explosionRadius: 0
+  projectileOwner: {fileID: 0}
+  explosionForce: 4000
+  explosionRadius: 3
   gravity: 0
-  speed: 1
-  lifeTime: 2
-  trigger: {fileID: 0}
-  rigidbody: {fileID: 0}
+  speed: 10
+  lifeTime: 100
+--- !u!114 &114772612212761884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1290245525039842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b40e87f66420488c859d858c5ad7b9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &136515002995986538
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -156,7 +180,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1435868204154812}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1

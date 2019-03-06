@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.CrossPlatformInput;
@@ -69,6 +70,7 @@ namespace ExplosionJumping {
         private float yRotation;
         private Vector3 groundContactNormal;
         private bool jump, previouslyGrounded, jumping, grounded;
+        private Dictionary<Collider, Vector3> normalCollisions = new Dictionary<Collider, Vector3>();
 
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
@@ -103,24 +105,24 @@ namespace ExplosionJumping {
             GroundCheck();
             Vector2 input = GetInput();
 
-            if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && grounded) {
-                if(movementSettings.crouching) {
-                    capsuleCollider.height = height * 0.5f;
-                } else {
-                    capsuleCollider.height = height;
-                }
-                // always move along the camera forward as it is the direction that it being aimed at
-                Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
-                desiredMove = Vector3.ProjectOnPlane(desiredMove, groundContactNormal).normalized;
+            if (Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) {
+                if (grounded) {
+                    // always move along the camera forward as it is the direction that it being aimed at
+                    Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
+                    desiredMove = Vector3.ProjectOnPlane(desiredMove, groundContactNormal).normalized;
 
-                desiredMove.x = desiredMove.x * movementSettings.currentTargetSpeed;
-                desiredMove.z = desiredMove.z * movementSettings.currentTargetSpeed;
-                desiredMove.y = desiredMove.y * movementSettings.currentTargetSpeed;
-                if (rigidBody.velocity.sqrMagnitude <
-                    (movementSettings.currentTargetSpeed * movementSettings.currentTargetSpeed)) {
-                    rigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.VelocityChange);
+                    desiredMove.x = desiredMove.x * movementSettings.currentTargetSpeed;
+                    desiredMove.z = desiredMove.z * movementSettings.currentTargetSpeed;
+                    desiredMove.y = desiredMove.y * movementSettings.currentTargetSpeed;
+                    if (rigidBody.velocity.sqrMagnitude <
+                        (movementSettings.currentTargetSpeed * movementSettings.currentTargetSpeed)) {
+                        rigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.VelocityChange);
+                    }
+                    else {
+                        rigidBody.velocity = desiredMove;
+                    }
                 } else {
-                    rigidBody.velocity = desiredMove;
+                    
                 }
             }
 
@@ -133,12 +135,7 @@ namespace ExplosionJumping {
                     rigidBody.AddForce(new Vector3(0f, movementSettings.jumpForce, 0f), ForceMode.VelocityChange);
                     jumping = true;
                 }
-
-                if (!jumping && Mathf.Abs(input.x) < float.Epsilon && Mathf.Abs(input.y) < float.Epsilon && rigidBody.velocity.magnitude < 1f) {
-                    rigidBody.Sleep();
-                }
-            }
-            else {
+            } else {
                 rigidBody.drag = 0f;
                 if (previouslyGrounded && !jumping) {
                     StickToGroundHelper();
@@ -183,9 +180,11 @@ namespace ExplosionJumping {
 
             mouseLook.LookRotation(transform, cam.transform);
 
-            // Rotate the rigidbody velocity to match the new direction that the character is looking
-            Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
-            rigidBody.velocity = velRotation * rigidBody.velocity;
+            if (grounded) {
+                // Rotate the rigidbody velocity to match the new direction that the character is looking
+                Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
+                rigidBody.velocity = velRotation * rigidBody.velocity;
+            }
         }
 
         /// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
@@ -204,6 +203,20 @@ namespace ExplosionJumping {
             if (!previouslyGrounded && grounded && jumping) {
                 jumping = false;
             }
+        }
+
+        private void OnCollisionEnter(Collision collision) {
+            foreach(ContactPoint p in collision.contacts) {
+                Debug.Log(p);
+            }
+        }
+
+        private void OnCollisionStay(Collision collision) {
+            
+        }
+
+        private void OnCollisionExit(Collision collision) {
+            normalCollisions.Remove(collision.collider);
         }
     }
 }

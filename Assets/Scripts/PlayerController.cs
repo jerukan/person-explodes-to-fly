@@ -2,29 +2,30 @@
 
 namespace ExplosionJumping {
     [RequireComponent(typeof(RigidbodyFPControllerCustom))]
-    [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour {
 
-        public RigidbodyFPControllerCustom charController;
-
-        private Transform playerTransform;
+        private RigidbodyFPControllerCustom charController;
 
         // Use this for initialization
-        void Start() {
+        private void Start() {
             charController = GetComponent<RigidbodyFPControllerCustom>();
-            playerTransform = GetComponent<Transform>();
         }
 
         // Update is called once per frame
-        void Update() {
-            Transform camTransform = charController.cam.transform;
+        private void Update() {
+            Transform camTransform = Camera.main.transform;
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                GameObject rocket = Instantiate(Resources.Load("Prefabs/BasicRocket"), camTransform.position, camTransform.rotation) as GameObject;
-                rocket.GetComponent<Rigidbody>().velocity = camTransform.forward * 10;
+                CreateRocket(camTransform);
             }
             if(Input.GetKeyDown(KeyCode.LeftShift)) {
                 charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 60, ForceMode.VelocityChange);
             }
+        }
+
+        private void CreateRocket(Transform spawnTransform) {
+            GameObject rocket = Instantiate(Resources.Load("Prefabs/BasicRocket"), spawnTransform.position, spawnTransform.rotation) as GameObject;
+            rocket.GetComponent<ExplosiveProjectileController>().projectileOwner = this;
+            rocket.GetComponent<Rigidbody>().velocity = spawnTransform.forward * rocket.GetComponent<ExplosiveProjectileController>().speed;
         }
     }
 }
