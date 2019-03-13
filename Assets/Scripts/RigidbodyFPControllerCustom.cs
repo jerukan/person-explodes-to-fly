@@ -7,9 +7,11 @@ using UnityStandardAssets.CrossPlatformInput;
 namespace ExplosionJumping {
     /// <summary>
     /// Ripped straight from RigidbodyFirstPersonController from the standard assets with some modifications.
+    /// Inspired by Source engine physics.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
+    [RequireComponent(typeof(AirStrafeController))]
     public class RigidbodyFPControllerCustom : MonoBehaviour {
         [Serializable]
         public class MovementSettings {
@@ -17,11 +19,13 @@ namespace ExplosionJumping {
             public float backwardSpeed = 4.0f;  // Speed when walking backwards
             public float strafeSpeed = 6.0f;    // Speed when walking sideways
             public float jumpForce = 5f;
+            public float groundAccelerationRate = 0.2f;
             public float airAcceleration = 1f;
             public float crouchMultiplier = 0.5f;
             internal bool crouching;
             public KeyCode crouchKey = KeyCode.LeftControl;
             public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
+            public float maxSpeed = 400;
             [HideInInspector] public float currentTargetSpeed = 8f;
 
             public void UpdateDesiredTargetSpeed(Vector2 input) {
@@ -54,8 +58,6 @@ namespace ExplosionJumping {
         public class AdvancedSettings {
             public float groundCheckDistance = 0.01f; // distance for checking if the controller is grounded ( 0.01f seems to work best for this )
             public float stickToGroundHelperDistance = 0.5f; // stops the character
-            [Tooltip("set it to 0.1 or more if you get stuck in wall")]
-            public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
 
         public Camera cam;
@@ -65,6 +67,9 @@ namespace ExplosionJumping {
 
         public float height = 1.6f;
         public float radius = 0.5f;
+        public float maxSlopeAllowed = 45;
+        public float requiredVelocityToSlide = 10;
+        public float requiredAngleToSlide = 5; // in degrees
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
@@ -72,6 +77,7 @@ namespace ExplosionJumping {
         private Vector3 groundContactNormal;
         private bool jump, previouslyGrounded, jumping, grounded;
         private Dictionary<Collider, Vector3> normalCollisions = new Dictionary<Collider, Vector3>();
+        private AnimationCurve slideCurveModifier = new AnimationCurve(new Keyframe(0, 1), new Keyframe(45, 1), new Keyframe(90, 0));
 
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
@@ -85,13 +91,18 @@ namespace ExplosionJumping {
             get { return jumping; }
         }
 
-        private void Start() {
+        private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
+            rigidBody.drag = 0;
+            //rigidBody.useGravity = false;
             capsuleCollider = GetComponent<CapsuleCollider>();
-            cam = Camera.main;
-            mouseLook.Init(transform, cam.transform);
             capsuleCollider.radius = radius;
             capsuleCollider.height = height;
+        }
+
+        private void Start() {
+            cam = Camera.main;
+            mouseLook.Init(transform, cam.transform);
         }
 
         private void Update() {
@@ -102,43 +113,28 @@ namespace ExplosionJumping {
             }
         }
 
+        /// <summary>
+        /// the way gravity is handled is really jank for this controller.
+        /// it's impossible to keep still on a slope with gravity without turning up the friction for the material, but that's even more annoying.
+        /// depending on the situation, gravity will either be on or off since I'm using Unity's built in physics
+        /// </summary>
         private void FixedUpdate() {
             GroundCheck();
+            //Debug.Log("Grounded: " + grounded);
             Vector2 input = GetInput();
 
-            if (Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) {
-                Vector3 desiredMove = cam.transform.forward * input.y + cam.transform.right * input.x;
-                if (grounded) {
-                    // always move along the camera forward as it is the direction that it being aimed at
-                    desiredMove = Vector3.ProjectOnPlane(desiredMove, groundContactNormal).normalized;
-                    desiredMove = desiredMove * movementSettings.currentTargetSpeed;
-
-                    if (rigidBody.velocity.sqrMagnitude <
-                        (movementSettings.currentTargetSpeed * movementSettings.currentTargetSpeed)) {
-                        rigidBody.AddForce(desiredMove * SlopeMultiplier(), ForceMode.VelocityChange);
-                    } else {
-                        rigidBody.velocity = desiredMove;
-                    }
-                } else {
-                    desiredMove = Vector3.ProjectOnPlane(desiredMove, Vector3.up).normalized;
-                    rigidBody.AddForce(desiredMove * movementSettings.airAcceleration, ForceMode.Acceleration);
-                }
-            }
-
             if (grounded) {
-                rigidBody.drag = 5f;
-
                 if (jump) {
-                    rigidBody.drag = 0f;
+                    rigidBody.useGravity = true;
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
                     rigidBody.AddForce(new Vector3(0f, movementSettings.jumpForce, 0f), ForceMode.VelocityChange);
                     jumping = true;
+                } else { // when completely grounded, ignore gravity and stick to ground
+                    rigidBody.useGravity = false;
+                    AccelerateToSpeed(input);
                 }
             } else {
-                rigidBody.drag = 0f;
-                if (previouslyGrounded && !jumping) {
-                    StickToGroundHelper();
-                }
+                rigidBody.useGravity = true;
             }
             jump = false;
         }
@@ -148,19 +144,17 @@ namespace ExplosionJumping {
             return movementSettings.slopeCurveModifier.Evaluate(angle);
         }
 
-        private void StickToGroundHelper() {
-            RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position, capsuleCollider.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
-                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) +
-                                   advancedSettings.stickToGroundHelperDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
-                if (Mathf.Abs(Vector3.Angle(hitInfo.normal, Vector3.up)) < 85f) {
-                    rigidBody.velocity = Vector3.ProjectOnPlane(rigidBody.velocity, hitInfo.normal);
-                }
-            }
+        private void AccelerateToSpeed(Vector2 input) {
+            Vector3 target = transform.TransformDirection(new Vector3(input.x, 0, input.y)).normalized;
+            target = target * movementSettings.currentTargetSpeed;
+            Vector3 delta = target - rigidBody.velocity;
+            delta.y = 0;
+            Vector3 projectedVelocity = Vector3.ProjectOnPlane(delta, groundContactNormal).normalized * delta.magnitude;
+            projectedVelocity = projectedVelocity * movementSettings.groundAccelerationRate;
+            rigidBody.AddForce(projectedVelocity, ForceMode.VelocityChange);
         }
 
         private Vector2 GetInput() {
-
             // raw axis makes keyboard actually work properly
             Vector2 input = new Vector2 {
                 x = CrossPlatformInputManager.GetAxisRaw("Horizontal"),
@@ -190,18 +184,43 @@ namespace ExplosionJumping {
         private void GroundCheck() {
             previouslyGrounded = grounded;
             RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position, capsuleCollider.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
+
+            if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
                                    ((capsuleCollider.height / 2f) - capsuleCollider.radius) + advancedSettings.groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
-                grounded = true;
                 groundContactNormal = hitInfo.normal;
-            }
-            else {
+                if (CanSlide() || Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
+                    grounded = false;
+                } else {
+                    grounded = true;
+                }
+            } else {
                 grounded = false;
                 groundContactNormal = Vector3.up;
             }
             if (!previouslyGrounded && grounded && jumping) {
                 jumping = false;
             }
+        }
+
+        /// <summary>
+        /// Checks when sliding is appropriate.
+        /// When the player wasn't previously grounded, the velocity can overcome the slope, and it meets the required angle to slide.
+        /// Angles based on rigidbody velocity.
+        /// </summary>
+        private bool CanSlide() {
+            return !grounded && 
+                    rigidBody.velocity.sqrMagnitude > GetRequiredSlideVelocity(rigidBody.velocity, groundContactNormal) && 
+                    Vector3.Angle(groundContactNormal, rigidBody.velocity) < requiredAngleToSlide;
+        }
+
+        private float GetRequiredSlideVelocity(Vector3 velocity, Vector3 groundNormal) {
+            float multiplier = Vector3.Cross(velocity.normalized, groundNormal.normalized).magnitude;
+            //Debug.Log(multiplier);
+            if(Math.Abs(multiplier) < float.Epsilon) {
+                return movementSettings.maxSpeed + 1;
+            }
+            Debug.Log(requiredVelocityToSlide / multiplier);
+            return requiredVelocityToSlide / multiplier;
         }
 
         private void OnCollisionEnter(Collision collision) {

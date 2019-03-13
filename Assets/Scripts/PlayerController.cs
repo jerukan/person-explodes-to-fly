@@ -18,7 +18,8 @@ namespace ExplosionJumping {
                 CreateRocket(camTransform);
             }
             if(Input.GetKeyDown(KeyCode.LeftShift)) {
-                charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 60, ForceMode.VelocityChange);
+                // todo make it not modified by vertical tilt
+                charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 40, ForceMode.VelocityChange);
             }
         }
 
