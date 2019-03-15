@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace ExplosionJumping {
+namespace ExplosionJumping.PlayerControl {
     /// <summary>
     /// Ripped straight from RigidbodyFirstPersonController from the standard assets with some modifications.
     /// Inspired by Source engine physics.
@@ -73,6 +73,7 @@ namespace ExplosionJumping {
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
+        private AirStrafeController airStrafeController;
         private float yRotation;
         private Vector3 groundContactNormal;
         private bool jump, previouslyGrounded, jumping, grounded;
@@ -94,10 +95,11 @@ namespace ExplosionJumping {
         private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 0;
-            //rigidBody.useGravity = false;
+            rigidBody.useGravity = false;
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.radius = radius;
             capsuleCollider.height = height;
+            airStrafeController = GetComponent<AirStrafeController>();
         }
 
         private void Start() {
@@ -122,7 +124,6 @@ namespace ExplosionJumping {
             GroundCheck();
             //Debug.Log("Grounded: " + grounded);
             Vector2 input = GetInput();
-
             if (grounded) {
                 if (jump) {
                     rigidBody.useGravity = true;
@@ -135,6 +136,7 @@ namespace ExplosionJumping {
                 }
             } else {
                 rigidBody.useGravity = true;
+                airStrafeController.AirStafe(input);
             }
             jump = false;
         }
@@ -219,7 +221,7 @@ namespace ExplosionJumping {
             if(Math.Abs(multiplier) < float.Epsilon) {
                 return movementSettings.maxSpeed + 1;
             }
-            Debug.Log(requiredVelocityToSlide / multiplier);
+            //Debug.Log(requiredVelocityToSlide / multiplier);
             return requiredVelocityToSlide / multiplier;
         }
 
