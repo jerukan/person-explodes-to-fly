@@ -273,7 +273,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 10
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -316,43 +316,12 @@ MonoBehaviour:
     strafeSpeed: 4
     jumpForce: 5
     groundAccelerationRate: 0.2
-    airAcceleration: 10
     crouchMultiplier: 0.5
     crouchKey: 306
-    slopeCurveModifier:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: -90
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 69.80423
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 90
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
     maxSpeed: 400
+    gravityMultiplier: 1
+    bunnyHopWindow: 0.2
+    autoBunnyHop: 1
     currentTargetSpeed: 8
   mouseLook:
     XSensitivity: 2
@@ -366,8 +335,6 @@ MonoBehaviour:
   advancedSettings:
     groundCheckDistance: 0.01
     stickToGroundHelperDistance: 0.5
-  height: 1.6
-  radius: 0.5
   maxSlopeAllowed: 45
   requiredVelocityToSlide: 50
   requiredAngleToSlide: 5

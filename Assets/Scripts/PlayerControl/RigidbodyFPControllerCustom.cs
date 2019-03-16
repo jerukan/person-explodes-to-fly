@@ -19,13 +19,20 @@ namespace ExplosionJumping.PlayerControl {
             public float backwardSpeed = 4.0f;  // Speed when walking backwards
             public float strafeSpeed = 6.0f;    // Speed when walking sideways
             public float jumpForce = 5f;
+            [Tooltip("The rate the player will speed up or slow down.")]
+            [Range(0f, 1f)]
             public float groundAccelerationRate = 0.2f;
-            public float airAcceleration = 1f;
+            [Tooltip("How much the player speed will be multiplied by when crouching.")]
             public float crouchMultiplier = 0.5f;
             internal bool crouching;
             public KeyCode crouchKey = KeyCode.LeftControl;
-            public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
-            public float maxSpeed = 400;
+            //public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
+            [Tooltip("The max possible speed the player can move at, even in the air.")]
+            public float maxSpeed = 400f;
+            public float gravityMultiplier = 1f;
+
+            public float bunnyHopWindow = 0.1f;
+            public bool autoBunnyHop;
             [HideInInspector] public float currentTargetSpeed = 8f;
 
             public void UpdateDesiredTargetSpeed(Vector2 input) {
@@ -45,10 +52,11 @@ namespace ExplosionJumping.PlayerControl {
                     //handled last as if strafing and moving forward at the same time forwards speed should take precedence
                     currentTargetSpeed = forwardSpeed;
                 }
-                if(Input.GetKey(crouchKey)) {
+                if (Input.GetKey(crouchKey)) {
                     currentTargetSpeed *= crouchMultiplier;
                     crouching = true;
-                } else {
+                }
+                else {
                     crouching = false;
                 }
             }
@@ -65,8 +73,8 @@ namespace ExplosionJumping.PlayerControl {
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
 
-        public float height = 1.6f;
-        public float radius = 0.5f;
+        //public float playerHeight = 1.6f;
+        //public float playerRadius = 0.5f;
         public float maxSlopeAllowed = 45;
         public float requiredVelocityToSlide = 10;
         public float requiredAngleToSlide = 5; // in degrees
@@ -76,9 +84,12 @@ namespace ExplosionJumping.PlayerControl {
         private AirStrafeController airStrafeController;
         private float yRotation;
         private Vector3 groundContactNormal;
-        private bool jump, previouslyGrounded, jumping, grounded;
-        private Dictionary<Collider, Vector3> normalCollisions = new Dictionary<Collider, Vector3>();
+        private bool jump, grounded;
         private AnimationCurve slideCurveModifier = new AnimationCurve(new Keyframe(0, 1), new Keyframe(45, 1), new Keyframe(90, 0));
+
+        private int ticksOnGround; // time the player has spend on the ground in the duration of being grounded.
+        private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
+        private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
 
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
@@ -88,17 +99,17 @@ namespace ExplosionJumping.PlayerControl {
             get { return grounded; }
         }
 
-        public bool Jumping {
-            get { return jumping; }
-        }
-
         private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 0;
+            rigidBody.angularDrag = 0;
             rigidBody.useGravity = false;
+            rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+            rigidBody.isKinematic = false;
             capsuleCollider = GetComponent<CapsuleCollider>();
-            capsuleCollider.radius = radius;
-            capsuleCollider.height = height;
+            //capsuleCollider.radius = playerRadius;
+            //capsuleCollider.height = playerHeight;
+            capsuleCollider.isTrigger = false;
             airStrafeController = GetComponent<AirStrafeController>();
         }
 
@@ -110,41 +121,51 @@ namespace ExplosionJumping.PlayerControl {
         private void Update() {
             RotateView();
 
-            if (CrossPlatformInputManager.GetButtonDown("Jump") && !jump) {
+            if (movementSettings.autoBunnyHop) {
+                jump = CrossPlatformInputManager.GetButton("Jump");
+            }
+            else if (CrossPlatformInputManager.GetButtonDown("Jump")) {
                 jump = true;
+                if (!grounded) {
+                    ticksWhenJumpedInAir = totalTicksInAir;
+                }
             }
         }
 
-        /// <summary>
-        /// the way gravity is handled is really jank for this controller.
-        /// it's impossible to keep still on a slope with gravity without turning up the friction for the material, but that's even more annoying.
-        /// depending on the situation, gravity will either be on or off since I'm using Unity's built in physics
-        /// </summary>
         private void FixedUpdate() {
             GroundCheck();
             //Debug.Log("Grounded: " + grounded);
             Vector2 input = GetInput();
             if (grounded) {
+                // todo make totalTicksInAir not actually total ticks
+                if((totalTicksInAir - ticksWhenJumpedInAir) * Time.fixedDeltaTime < movementSettings.bunnyHopWindow / 2) {
+                    jump = true;
+                    //ticksWhenJumpedInAir = 0;
+                }
+                ticksOnGround++;
+                //ticksInAir = 0;
                 if (jump) {
-                    rigidBody.useGravity = true;
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
                     rigidBody.AddForce(new Vector3(0f, movementSettings.jumpForce, 0f), ForceMode.VelocityChange);
-                    jumping = true;
-                } else { // when completely grounded, ignore gravity and stick to ground
-                    rigidBody.useGravity = false;
+                }
+                else if(ticksOnGround * Time.fixedDeltaTime > movementSettings.bunnyHopWindow / 2f) { // when completely grounded, ignore gravity and stick to ground
+                    // also prevents normal ground movement until the bunnyhop window goes past.
                     AccelerateToSpeed(input);
                 }
-            } else {
-                rigidBody.useGravity = true;
+            }
+            else {
+                ticksOnGround = 0;
+                totalTicksInAir++;
+                rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * movementSettings.gravityMultiplier * rigidBody.mass, 0f), ForceMode.Force);
                 airStrafeController.AirStafe(input);
             }
             jump = false;
         }
 
-        private float SlopeMultiplier() {
-            float angle = Vector3.Angle(groundContactNormal, Vector3.up);
-            return movementSettings.slopeCurveModifier.Evaluate(angle);
-        }
+        //private float SlopeMultiplier() {
+        //    float angle = Vector3.Angle(groundContactNormal, Vector3.up);
+        //    return movementSettings.slopeCurveModifier.Evaluate(angle);
+        //}
 
         private void AccelerateToSpeed(Vector2 input) {
             Vector3 target = transform.TransformDirection(new Vector3(input.x, 0, input.y)).normalized;
@@ -182,9 +203,11 @@ namespace ExplosionJumping.PlayerControl {
             }
         }
 
-        /// sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
+        /// <summary>
+        /// Sphere cast down just beyond the bottom of the capsule to see if the capsule is colliding round the bottom
+        /// Sphere radius is slightly smaller than capsule radius to prevent collision with vertical walls.
+        /// </summary>
         private void GroundCheck() {
-            previouslyGrounded = grounded;
             RaycastHit hitInfo;
 
             if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
@@ -192,15 +215,14 @@ namespace ExplosionJumping.PlayerControl {
                 groundContactNormal = hitInfo.normal;
                 if (CanSlide() || Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
                     grounded = false;
-                } else {
+                }
+                else {
                     grounded = true;
                 }
-            } else {
+            }
+            else {
                 grounded = false;
                 groundContactNormal = Vector3.up;
-            }
-            if (!previouslyGrounded && grounded && jumping) {
-                jumping = false;
             }
         }
 
@@ -210,31 +232,19 @@ namespace ExplosionJumping.PlayerControl {
         /// Angles based on rigidbody velocity.
         /// </summary>
         private bool CanSlide() {
-            return !grounded && 
-                    rigidBody.velocity.sqrMagnitude > GetRequiredSlideVelocity(rigidBody.velocity, groundContactNormal) && 
+            return !grounded &&
+                    rigidBody.velocity.sqrMagnitude > GetRequiredSlideVelocity(rigidBody.velocity, groundContactNormal) &&
                     Vector3.Angle(groundContactNormal, rigidBody.velocity) < requiredAngleToSlide;
         }
 
         private float GetRequiredSlideVelocity(Vector3 velocity, Vector3 groundNormal) {
             float multiplier = Vector3.Cross(velocity.normalized, groundNormal.normalized).magnitude;
             //Debug.Log(multiplier);
-            if(Math.Abs(multiplier) < float.Epsilon) {
+            if (Math.Abs(multiplier) < float.Epsilon) {
                 return movementSettings.maxSpeed + 1;
             }
             //Debug.Log(requiredVelocityToSlide / multiplier);
             return requiredVelocityToSlide / multiplier;
-        }
-
-        private void OnCollisionEnter(Collision collision) {
-            normalCollisions[collision.collider] = collision.contacts[0].normal; // 1 point of contact and its normal is sufficient.
-        }
-
-        private void OnCollisionStay(Collision collision) {
-            normalCollisions[collision.collider] = collision.contacts[0].normal; // 1 point of contact and its normal is sufficient.
-        }
-
-        private void OnCollisionExit(Collision collision) {
-            normalCollisions.Remove(collision.collider);
         }
     }
 }
