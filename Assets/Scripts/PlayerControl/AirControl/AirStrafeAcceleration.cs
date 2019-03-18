@@ -4,7 +4,10 @@ using ExplosionJumping.Util;
 using System;
 
 namespace ExplosionJumping.PlayerControl.AirControl {
-    public class LinearAirStrafe: AirStrafeController {
+    /// <summary>
+    /// This version of air control is taken straight from how the Source Engine handles air movement.
+    /// </summary>
+    public class AirStrafeAcceleration: PlayerAirController {
 
         [Tooltip("The max speed allowed for the player to accelerate up to in each cardinal direction relative to the direction the player is looking. " +
                  "By rotating player view and accelerating in the one correct direction, air speed can increased quickly.")]

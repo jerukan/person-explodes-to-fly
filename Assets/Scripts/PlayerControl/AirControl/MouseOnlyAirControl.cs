@@ -2,7 +2,10 @@
 using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.AirControl {
-    public class MouseOnlyAirStrafe : AirStrafeController {
+    /// <summary>
+    /// Player velocity is set to face whatever direction is being faced.
+    /// </summary>
+    public class MouseOnlyAirControl : PlayerAirController {
 
         public override void AirStafe(Vector2 input) {
             Vector3 resultVector = cam.transform.forward;

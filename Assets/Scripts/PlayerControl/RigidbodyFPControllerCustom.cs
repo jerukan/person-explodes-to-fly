@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using ExplosionJumping.PlayerControl.AirControl;
 using UnityEngine;
-using UnityStandardAssets.Characters.FirstPerson;
-using UnityStandardAssets.CrossPlatformInput;
 
 namespace ExplosionJumping.PlayerControl {
     /// <summary>
-    /// Ripped straight from RigidbodyFirstPersonController from the standard assets with some modifications.
-    /// Inspired by Source engine physics.
+    /// Ripped straight from RigidbodyFirstPersonController from the standard assets with many modifications.
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
-    [RequireComponent(typeof(AirStrafeController))]
+    [RequireComponent(typeof(PlayerAirController))]
     public class RigidbodyFPControllerCustom : MonoBehaviour {
         [Serializable]
         public class MovementSettings {
@@ -89,7 +85,7 @@ namespace ExplosionJumping.PlayerControl {
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
-        private AirStrafeController airStrafeController;
+        private PlayerAirController airStrafeController;
         private Vector3 groundContactNormal;
         private bool jump, grounded;
         private AnimationCurve slideCurveModifier = new AnimationCurve(new Keyframe(0, 1), new Keyframe(45, 1), new Keyframe(90, 0));
@@ -117,7 +113,7 @@ namespace ExplosionJumping.PlayerControl {
             //capsuleCollider.radius = playerRadius;
             //capsuleCollider.height = playerHeight;
             capsuleCollider.isTrigger = false;
-            airStrafeController = GetComponent<AirStrafeController>();
+            airStrafeController = GetComponent<PlayerAirController>();
         }
 
         private void Start() {
@@ -129,9 +125,9 @@ namespace ExplosionJumping.PlayerControl {
             RotateView();
 
             if (movementSettings.autoBunnyHop) {
-                jump = CrossPlatformInputManager.GetButton("Jump");
+                jump = Input.GetButton("Jump");
             }
-            else if (CrossPlatformInputManager.GetButtonDown("Jump")) {
+            else if (Input.GetButtonDown("Jump")) {
                 jump = true;
                 if (!grounded) {
                     ticksWhenJumpedInAir = totalTicksInAir;
@@ -189,8 +185,8 @@ namespace ExplosionJumping.PlayerControl {
         private Vector2 GetInput() {
             // raw axis makes keyboard actually work properly
             Vector2 input = new Vector2 {
-                x = CrossPlatformInputManager.GetAxisRaw("Horizontal"),
-                y = CrossPlatformInputManager.GetAxisRaw("Vertical")
+                x = Input.GetAxisRaw("Horizontal"),
+                y = Input.GetAxisRaw("Vertical")
             };
             movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
