@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExplosionJumping.PlayerControl.AirControl;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.CrossPlatformInput;
@@ -15,24 +16,31 @@ namespace ExplosionJumping.PlayerControl {
     public class RigidbodyFPControllerCustom : MonoBehaviour {
         [Serializable]
         public class MovementSettings {
+            [Header("Basic movement")]
             public float forwardSpeed = 6.0f;   // Speed when walking forward
             public float backwardSpeed = 4.0f;  // Speed when walking backwards
             public float strafeSpeed = 6.0f;    // Speed when walking sideways
-            public float jumpForce = 5f;
-            [Tooltip("The rate the player will speed up or slow down.")]
+            [Tooltip("The rate the player will speed up or slow down while walking.")]
             [Range(0f, 1f)]
             public float groundAccelerationRate = 0.2f;
             [Tooltip("How much the player speed will be multiplied by when crouching.")]
             public float crouchMultiplier = 0.5f;
             internal bool crouching;
             public KeyCode crouchKey = KeyCode.LeftControl;
-            //public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
-            [Tooltip("The max possible speed the player can move at, even in the air.")]
+            [Tooltip("The max possible horizontal speed the player can move at, even in the air.")]
             public float maxSpeed = 400f;
-            public float gravityMultiplier = 1f;
+            [Tooltip("The maximum speed the player can be at before being considered at a standstill.")]
+            public float lowestSpeedPossible = 0.0001f;
 
+            [Header("Vertical movement")]
+            public float jumpForce = 5f;
+            public float gravityMultiplier = 1f;
+            [Tooltip("Window of time in seconds where a premature/late jump will preserve momentum.")]
             public float bunnyHopWindow = 0.1f;
+            [Tooltip("Allows the user to hold down jump to continuously bunnyhop perfectly.")]
             public bool autoBunnyHop;
+
+            //public AnimationCurve slopeCurveModifier = new AnimationCurve(new Keyframe(-90.0f, 1.0f), new Keyframe(0.0f, 1.0f), new Keyframe(90.0f, 0.0f));
             [HideInInspector] public float currentTargetSpeed = 8f;
 
             public void UpdateDesiredTargetSpeed(Vector2 input) {
@@ -82,7 +90,6 @@ namespace ExplosionJumping.PlayerControl {
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
         private AirStrafeController airStrafeController;
-        private float yRotation;
         private Vector3 groundContactNormal;
         private bool jump, grounded;
         private AnimationCurve slideCurveModifier = new AnimationCurve(new Keyframe(0, 1), new Keyframe(45, 1), new Keyframe(90, 0));
@@ -151,6 +158,7 @@ namespace ExplosionJumping.PlayerControl {
                 else if(ticksOnGround * Time.fixedDeltaTime > movementSettings.bunnyHopWindow / 2f) { // when completely grounded, ignore gravity and stick to ground
                     // also prevents normal ground movement until the bunnyhop window goes past.
                     AccelerateToSpeed(input);
+                    ZeroLowVelocity();
                 }
             }
             else {
@@ -159,6 +167,7 @@ namespace ExplosionJumping.PlayerControl {
                 rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * movementSettings.gravityMultiplier * rigidBody.mass, 0f), ForceMode.Force);
                 airStrafeController.AirStafe(input);
             }
+            CapHorizontalVelocity();
             jump = false;
         }
 
@@ -224,6 +233,29 @@ namespace ExplosionJumping.PlayerControl {
                 grounded = false;
                 groundContactNormal = Vector3.up;
             }
+        }
+
+        private void CapHorizontalVelocity() {
+            Vector3 velocityNoY = rigidBody.velocity;
+            velocityNoY.y = 0;
+            Debug.Log($"current speed {velocityNoY.magnitude}");
+            if (velocityNoY.sqrMagnitude > movementSettings.maxSpeed * movementSettings.maxSpeed) {
+                Debug.Log($"hit max speed at velocity {velocityNoY.magnitude}");
+                velocityNoY = velocityNoY.normalized * movementSettings.maxSpeed;
+                rigidBody.velocity = new Vector3(velocityNoY.x, rigidBody.velocity.y, velocityNoY.z);
+            }
+        }
+
+        private void ZeroLowVelocity() {
+            float velX = rigidBody.velocity.x;
+            float velZ = rigidBody.velocity.z;
+            if (Math.Abs(rigidBody.velocity.x) < movementSettings.lowestSpeedPossible) {
+                velX = 0;
+            }
+            if (Math.Abs(rigidBody.velocity.z) < movementSettings.lowestSpeedPossible) {
+                velZ = 0;
+            }
+            rigidBody.velocity = new Vector3(velX, rigidBody.velocity.y, velZ);
         }
 
         /// <summary>

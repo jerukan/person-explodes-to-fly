@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 namespace ExplosionJumping.Util{
+    [RequireComponent(typeof(Collider))]
     public class TriggerTeleporter : MonoBehaviour {
 
         public Transform targetTransform;
