@@ -127,7 +127,7 @@ namespace ExplosionJumping.PlayerControl {
 
         private void FixedUpdate() {
             GroundCheck();
-            Debug.Log("Grounded: " + grounded);
+            //Debug.Log("Grounded: " + grounded);
             Vector2 input = GetInput();
             if (grounded) {
                 // todo make totalTicksInAir not actually total ticks
@@ -210,7 +210,7 @@ namespace ExplosionJumping.PlayerControl {
                 groundContactNormal = hitInfo.normal;
                 RaycastHit hitInfoStraight;
                 Physics.Raycast(transform.position, Vector3.down, out hitInfoStraight, ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-                Debug.Log($"spherecast dist: {hitInfo.distance}, straightcast: {hitInfoStraight.distance}");
+                //Debug.Log($"spherecast dist: {hitInfo.distance}, straightcast: {hitInfoStraight.distance}");
                 //Debug.Log(Vector3.Angle(groundContactNormal, Vector3.up));
                 if (CanSlide() || Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
                     grounded = false;

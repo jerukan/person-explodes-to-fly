@@ -325,8 +325,8 @@ MonoBehaviour:
     autoBunnyHop: 1
     currentTargetSpeed: 8
   mouseLook:
-    XSensitivity: 2
-    YSensitivity: 2
+    XSensitivity: 1.25
+    YSensitivity: 1.25
     clampVerticalRotation: 1
     MinimumX: -90
     MaximumX: 90
