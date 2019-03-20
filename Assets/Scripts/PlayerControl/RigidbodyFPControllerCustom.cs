@@ -66,19 +66,12 @@ namespace ExplosionJumping.PlayerControl {
             }
         }
 
-        [Serializable]
-        public class AdvancedSettings {
-            public float groundCheckDistance = 0.01f; // distance for checking if the controller is grounded ( 0.01f seems to work best for this )
-            public float stickToGroundHelperDistance = 0.5f; // stops the character
-        }
-
         public Camera cam;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
-        public AdvancedSettings advancedSettings = new AdvancedSettings();
 
-        //public float playerHeight = 1.6f;
-        //public float playerRadius = 0.5f;
+        [Tooltip("Distance for checking if the controller is grounded (0.01f seems to work best for this).")]
+        public float groundCheckDistance = 0.01f; // distance for checking if the controller is grounded ( 0.01f seems to work best for this )
         public float maxSlopeAllowed = 45;
         public float requiredVelocityToSlide = 10;
         public float requiredAngleToSlide = 5; // in degrees
@@ -110,14 +103,11 @@ namespace ExplosionJumping.PlayerControl {
             rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
             rigidBody.isKinematic = false;
             capsuleCollider = GetComponent<CapsuleCollider>();
-            //capsuleCollider.radius = playerRadius;
-            //capsuleCollider.height = playerHeight;
             capsuleCollider.isTrigger = false;
             airStrafeController = GetComponent<PlayerAirController>();
         }
 
         private void Start() {
-            cam = Camera.main;
             mouseLook.Init(transform, cam.transform);
         }
 
@@ -137,7 +127,7 @@ namespace ExplosionJumping.PlayerControl {
 
         private void FixedUpdate() {
             GroundCheck();
-            //Debug.Log("Grounded: " + grounded);
+            Debug.Log("Grounded: " + grounded);
             Vector2 input = GetInput();
             if (grounded) {
                 // todo make totalTicksInAir not actually total ticks
@@ -216,8 +206,12 @@ namespace ExplosionJumping.PlayerControl {
             RaycastHit hitInfo;
 
             if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
-                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + advancedSettings.groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
+                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
+                RaycastHit hitInfoStraight;
+                Physics.Raycast(transform.position, Vector3.down, out hitInfoStraight, ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+                Debug.Log($"spherecast dist: {hitInfo.distance}, straightcast: {hitInfoStraight.distance}");
+                //Debug.Log(Vector3.Angle(groundContactNormal, Vector3.up));
                 if (CanSlide() || Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
                     grounded = false;
                 }
@@ -234,9 +228,7 @@ namespace ExplosionJumping.PlayerControl {
         private void CapHorizontalVelocity() {
             Vector3 velocityNoY = rigidBody.velocity;
             velocityNoY.y = 0;
-            Debug.Log($"current speed {velocityNoY.magnitude}");
             if (velocityNoY.sqrMagnitude > movementSettings.maxSpeed * movementSettings.maxSpeed) {
-                Debug.Log($"hit max speed at velocity {velocityNoY.magnitude}");
                 velocityNoY = velocityNoY.normalized * movementSettings.maxSpeed;
                 rigidBody.velocity = new Vector3(velocityNoY.x, rigidBody.velocity.y, velocityNoY.z);
             }

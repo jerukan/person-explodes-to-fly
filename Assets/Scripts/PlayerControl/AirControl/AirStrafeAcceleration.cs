@@ -64,7 +64,6 @@ namespace ExplosionJumping.PlayerControl.AirControl {
                 }
             }
 
-            Vector3 worldForce = new Vector3(accelVector.x / (Time.fixedDeltaTime * Time.fixedDeltaTime), 0, accelVector.z / (Time.fixedDeltaTime * Time.fixedDeltaTime));
             rigidBody.AddForce(transform.TransformDirection(accelVector), ForceMode.VelocityChange);
         }
     }
