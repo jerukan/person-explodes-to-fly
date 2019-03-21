@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ExplosionJumping.PlayerControl;
+using UnityEngine;
 
 namespace ExplosionJumping.Util{
     [RequireComponent(typeof(Collider))]

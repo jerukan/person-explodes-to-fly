@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ExplosionJumping {
+namespace ExplosionJumping.Weapon.Projectile {
     [RequireComponent(typeof(ExplosiveProjectileController))]
     public class ExplosiveProjectileTrigger : MonoBehaviour {
 

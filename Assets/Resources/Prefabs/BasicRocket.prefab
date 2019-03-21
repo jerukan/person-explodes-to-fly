@@ -154,14 +154,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1290245525039842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b20188c84730b4880ac1eb018a7ca01d, type: 3}
+  m_Script: {fileID: 11500000, guid: fa35d8f10635f4e879c1abf9ad8a9f21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectileOwner: {fileID: 0}
-  explosionForce: 100
+  explosionForce: 120
   explosionRadius: 3
   gravity: 0
-  speed: 20
+  speed: 25
   acceleration: 0
   lifeTime: 50
 --- !u!114 &114772612212761884
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1290245525039842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6de91fa28761405f8e373b3bd34a595, type: 3}
+  m_Script: {fileID: 11500000, guid: 92901522aa47046a98b968d738413c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!136 &136515002995986538

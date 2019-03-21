@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using ExplosionJumping.PlayerControl;
 
-namespace ExplosionJumping {
+namespace ExplosionJumping.Weapon.Projectile {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(ExplosiveProjectileTrigger))]
@@ -25,6 +26,7 @@ namespace ExplosionJumping {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.useGravity = gravity;
             Physics.IgnoreLayerCollision(9, 10);
+            Physics.IgnoreLayerCollision(10, 11);
             projectileTrigger = GetComponent<ExplosiveProjectileTrigger>();
             particles = GetComponent<ParticleSystem>();
             Invoke("Explode", lifeTime);

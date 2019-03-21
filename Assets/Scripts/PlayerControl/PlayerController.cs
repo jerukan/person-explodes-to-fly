@@ -1,7 +1,8 @@
-﻿using ExplosionJumping.PlayerControl;
+﻿using ExplosionJumping.Weapon;
+using ExplosionJumping.Weapon.Projectile;
 using UnityEngine;
 
-namespace ExplosionJumping {
+namespace ExplosionJumping.PlayerControl {
     [RequireComponent(typeof(RigidbodyFPControllerCustom))]
     public class PlayerController : MonoBehaviour {
 
@@ -15,19 +16,10 @@ namespace ExplosionJumping {
         // Update is called once per frame
         private void Update() {
             Transform camTransform = Camera.main.transform;
-            if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                CreateRocket(camTransform);
-            }
             if(Input.GetKeyDown(KeyCode.LeftShift)) {
                 // todo make it not modified by vertical tilt
                 charController.GetComponent<Rigidbody>().AddForce(camTransform.forward * 40, ForceMode.VelocityChange);
             }
-        }
-
-        private void CreateRocket(Transform spawnTransform) {
-            GameObject rocket = Instantiate(Resources.Load("Prefabs/BasicRocket"), spawnTransform.position, spawnTransform.rotation) as GameObject;
-            rocket.GetComponent<ExplosiveProjectileController>().projectileOwner = this;
-            rocket.GetComponent<Rigidbody>().velocity = spawnTransform.forward * rocket.GetComponent<ExplosiveProjectileController>().speed;
         }
     }
 }

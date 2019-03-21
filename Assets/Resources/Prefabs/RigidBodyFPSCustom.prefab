@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 114081812441207190}
   - component: {fileID: 114391502314979226}
   - component: {fileID: 114762123195891280}
+  - component: {fileID: 114508855472955520}
   m_Layer: 9
   m_Name: RigidBodyFPSCustom
   m_TagString: Player
@@ -105,7 +106,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1830071249688946}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.897, z: 3.191}
+  m_LocalPosition: {x: 0, y: 1.49, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4134208786079690}
@@ -168,7 +169,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1335
+    m_Bits: 3383
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -345,9 +346,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1830071249688946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23ecfcbec545648de989f05f61c024d1, type: 3}
+  m_Script: {fileID: 11500000, guid: e26bb5c050dc34b8ea2a27112274fca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114508855472955520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830071249688946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0d3144853b9a4a01ac230e989106037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefabs:
+  - {fileID: 114580479567636246, guid: 7827d3a98892b441b93a55e80e983783, type: 2}
+  - {fileID: 114450041212092134, guid: 6e21b60bac73e4863bc3f9b8b3faf62b, type: 2}
 --- !u!114 &114762123195891280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -361,7 +376,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linearAccelerationLimit: 1
   linearAcceleration: 0.5
-  highAccelerationInaccuracyModifer: 0.0001
 --- !u!124 &124986116910727402
 Behaviour:
   m_ObjectHideFlags: 1
