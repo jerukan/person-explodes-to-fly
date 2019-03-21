@@ -161,7 +161,7 @@ MonoBehaviour:
   explosionForce: 120
   explosionRadius: 3
   gravity: 0
-  speed: 25
+  speed: 20
   acceleration: 0
   lifeTime: 50
 --- !u!114 &114772612212761884

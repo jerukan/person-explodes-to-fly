@@ -17,9 +17,9 @@ namespace ExplosionJumping.Weapon.Projectile {
         public float acceleration;
         public float lifeTime;
 
-        private Rigidbody rigidBody;
-        private ExplosiveProjectileTrigger projectileTrigger;
-        private ParticleSystem particles;
+        protected Rigidbody rigidBody;
+        protected ExplosiveProjectileTrigger projectileTrigger;
+        protected ParticleSystem particles;
 
         // Use this for initialization
         void Start() {
