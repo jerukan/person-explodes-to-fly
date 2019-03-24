@@ -2,24 +2,22 @@
 using System.Collections;
 using UnityEngine.Events;
 using ExplosionJumping.PlayerControl;
+using ExplosionJumping.Weapon.Projectile.Trigger;
+using ExplosionJumping.Weapon.Projectile.Explosion;
 
 namespace ExplosionJumping.Weapon.Projectile {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(ExplosiveProjectileTrigger))]
+    [RequireComponent(typeof(ExplosionTrigger))]
+    [RequireComponent(typeof(ExplosionController))]
     public class ExplosiveProjectileController : MonoBehaviour {
-
-        public PlayerController projectileOwner;
-        public float explosionForce;
-        public float explosionRadius;
+        [HideInInspector]public PlayerController projectileOwner;
         public bool gravity;
         public float speed;
         public float acceleration;
         public float lifeTime;
 
         protected Rigidbody rigidBody;
-        protected ExplosiveProjectileTrigger projectileTrigger;
-        protected ParticleSystem particles;
 
         // Use this for initialization
         void Start() {
@@ -27,9 +25,6 @@ namespace ExplosionJumping.Weapon.Projectile {
             rigidBody.useGravity = gravity;
             Physics.IgnoreLayerCollision(9, 10);
             Physics.IgnoreLayerCollision(10, 11);
-            projectileTrigger = GetComponent<ExplosiveProjectileTrigger>();
-            particles = GetComponent<ParticleSystem>();
-            Invoke("Explode", lifeTime);
         }
 
         // Update is called once per frame
@@ -39,22 +34,6 @@ namespace ExplosionJumping.Weapon.Projectile {
 
         private void FixedUpdate() {
             rigidBody.AddForce(rigidBody.velocity.normalized * acceleration, ForceMode.Acceleration);
-        }
-
-        public void Explode() {
-            Vector3 explosionPos = transform.position;
-            Collider[] hit = Physics.OverlapSphere(explosionPos, explosionRadius);
-            foreach(Collider hitCollider in hit) {
-                if(hitCollider.GetComponent<PlayerController>() != null) {
-                    Rigidbody hitBody = hitCollider.GetComponent<Rigidbody>();
-                    hitBody.AddExplosionForce(explosionForce, explosionPos, explosionRadius, 0f, ForceMode.Impulse);
-                }
-            }
-            particles.Play();
-            rigidBody.velocity = Vector3.zero;
-            GetComponent<Collider>().enabled = false;
-            GetComponentInChildren<MeshRenderer>().enabled = false;
-            Destroy(gameObject, particles.main.duration);
         }
     }
 }

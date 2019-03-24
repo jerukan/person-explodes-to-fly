@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ExplosionJumping.PlayerControl;
 
 namespace ExplosionJumping.Weapon.Projectile {
-    public class StickybombController : ExplosiveProjectileController {
+    public class StickybombProjectileController : ExplosiveProjectileController {
 
         void OnCollisionEnter(Collision collision) {
             rigidBody.velocity = Vector3.zero;

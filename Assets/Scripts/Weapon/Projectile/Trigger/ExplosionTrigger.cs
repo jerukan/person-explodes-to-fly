@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ExplosionJumping.Weapon.Projectile.Explosion;
 
-namespace ExplosionJumping.Weapon.Projectile {
+namespace ExplosionJumping.Weapon.Projectile.Trigger {
     [RequireComponent(typeof(ExplosiveProjectileController))]
-    public class ExplosiveProjectileTrigger : MonoBehaviour {
+    public class ExplosionTrigger : MonoBehaviour {
 
-        protected ExplosiveProjectileController projectileController;
+        protected ExplosionController explosionController;
 
         // Use this for initialization
         private void Start() {
-            projectileController = GetComponent<ExplosiveProjectileController>();
+            explosionController = GetComponent<ExplosionController>();
         }
 
         // Update is called once per frame
@@ -18,7 +19,7 @@ namespace ExplosionJumping.Weapon.Projectile {
         }
 
         protected void Trigger() {
-            projectileController.Explode();
+            explosionController.Explode();
         }
     }
 }

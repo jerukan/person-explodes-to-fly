@@ -311,20 +311,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 20391502722244772}
-  movementSettings:
-    forwardSpeed: 4
-    backwardSpeed: 3
-    strafeSpeed: 4
-    groundAccelerationRate: 0.2
-    crouchMultiplier: 0.5
-    crouchKey: 306
-    maxSpeed: 400
-    lowestSpeedPossible: 0.0001
-    jumpForce: 5
-    gravityMultiplier: 1
-    bunnyHopWindow: 0.2
-    autoBunnyHop: 1
-    currentTargetSpeed: 8
   mouseLook:
     XSensitivity: 1.25
     YSensitivity: 1.25
@@ -334,10 +320,74 @@ MonoBehaviour:
     smooth: 0
     smoothTime: 5
     lockCursor: 1
+  forwardSpeed: 4
+  backwardSpeed: 3.5
+  strafeSpeed: 4
+  groundAccelerationRate: 0.2
+  crouchMultiplier: 0.5
+  crouchKey: 306
+  maxSpeed: 400
+  lowestSpeedPossible: 0.0001
+  jumpForce: 5
+  gravityMultiplier: 1
+  bunnyHopWindow: 0.2
+  autoBunnyHop: 1
   groundCheckDistance: 0.01
   maxSlopeAllowed: 45
-  requiredVelocityToSlide: 50
+  requiredVelocityToSlide: 10
   requiredAngleToSlide: 5
+  autoClimbMaxHeight: 0.5
+  slideFrictionModifier:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -90
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: -45
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0
+      value: 0.95
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 45
+      value: 0.9
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 90
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1

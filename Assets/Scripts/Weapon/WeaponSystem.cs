@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ExplosionJumping.PlayerControl;
+using ExplosionJumping.Util;
 
 namespace ExplosionJumping.Weapon {
     public class WeaponSystem : MonoBehaviour {
@@ -8,6 +9,7 @@ namespace ExplosionJumping.Weapon {
         public WeaponController[] weaponPrefabs;
 
         private WeaponController[] weapons;
+        private int prevWeaponIndex;
         private int currentWeaponIndex;
         public WeaponController CurrentWeapon {
             get { return weapons[currentWeaponIndex]; }
@@ -20,12 +22,12 @@ namespace ExplosionJumping.Weapon {
                 GameObject weaponInstance = Instantiate(weaponPrefabs[i].gameObject);
                 weapons[i] = weaponInstance.GetComponent<WeaponController>();
                 weapons[i].owner = GetComponent<PlayerController>();
-                weapons[i].gameObject.SetActive(false);
+                ToggleWeapon(i, false);
                 weapons[i].transform.SetParent(GetComponentInChildren<Camera>().transform);
                 weapons[i].transform.localPosition = weapons[i].weaponOffset;
             }
             currentWeaponIndex = 0;
-            CurrentWeapon.gameObject.SetActive(true);
+            ToggleWeapon(0, true);
         }
 
         // Update is called once per frame
@@ -36,31 +38,42 @@ namespace ExplosionJumping.Weapon {
             } else if(scrolled > 0f) {
                 CycleWeapon(false);
             }
+            int numberPressed = Utils.GetNumberPressed();
+            SetCurrentWeapon(numberPressed - 1);
         }
 
         public void CycleWeapon(bool backward) {
-            int prevWeapon = currentWeaponIndex;
+            int wanted;
             if(backward) {
-                currentWeaponIndex--;
-                if(currentWeaponIndex < 0) {
-                    currentWeaponIndex = weapons.Length - 1;
+                wanted = currentWeaponIndex - 1;
+                if(wanted < 0) {
+                    wanted = weapons.Length - 1;
                 }
-                weapons[prevWeapon].gameObject.SetActive(false);
-                weapons[currentWeaponIndex].gameObject.SetActive(true);
+                SetCurrentWeapon(wanted);
             } else {
-                currentWeaponIndex++;
-                if(currentWeaponIndex >= weapons.Length) {
-                    currentWeaponIndex = 0;
+                wanted = currentWeaponIndex + 1;
+                if(wanted >= weapons.Length) {
+                    wanted = 0;
                 }
-                weapons[prevWeapon].gameObject.SetActive(false);
-                weapons[currentWeaponIndex].gameObject.SetActive(true);
+                SetCurrentWeapon(wanted);
             }
         }
 
-        public void SetWeapon(int index) {
-            if (index >= 0 && index < weapons.Length) {
+        public void SetCurrentWeapon(int index) {
+            if (index >= 0 && index < weapons.Length && index != currentWeaponIndex) {
+                prevWeaponIndex = currentWeaponIndex;
                 currentWeaponIndex = index;
+                ToggleWeapon(prevWeaponIndex, false);
+                ToggleWeapon(currentWeaponIndex, true);
             }
+        }
+
+        private void ToggleWeapon(int index, bool shouldEnable) {
+            var meshRenderers = weapons[index].GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer mr in meshRenderers) {
+                mr.enabled = shouldEnable;
+            }
+            weapons[index].GetComponent<WeaponController>().enabled = shouldEnable;
         }
     }
 }

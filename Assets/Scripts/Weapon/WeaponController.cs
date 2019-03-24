@@ -17,13 +17,14 @@ namespace ExplosionJumping.Weapon {
         public KeyCode primaryFireKey = KeyCode.Mouse0;
         public KeyCode secondaryFireKey = KeyCode.Mouse1;
 
-        [HideInInspector]public PlayerController owner;
+        [HideInInspector] public PlayerController owner;
+        private Animator animator;
         private float timeUntilNextShotPrimary;
         private float timeUntilNextShotSecondary;
 
         // Use this for initialization
         void Start() {
-
+            animator = GetComponentInChildren<Animator>();
         }
 
         // Update is called once per frame
@@ -38,6 +39,9 @@ namespace ExplosionJumping.Weapon {
                 if(Input.GetKey(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
                     OnPrimaryFire();
                     timeUntilNextShotPrimary = fireRatePrimary;
+                    animator.SetBool("Fired", true);
+                } else {
+                    animator.SetBool("Fired", false);
                 }
                 if(Input.GetKey(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
                     OnSecondaryFire();
@@ -47,6 +51,9 @@ namespace ExplosionJumping.Weapon {
                 if(Input.GetKeyDown(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
                     OnPrimaryFire();
                     timeUntilNextShotPrimary = fireRatePrimary;
+                    animator.SetBool("Fired", true);
+                } else {
+                    animator.SetBool("Fired", false);
                 }
                 if (Input.GetKeyDown(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
                     OnSecondaryFire();

@@ -20,9 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4420715522657468}
   - component: {fileID: 54330024509538416}
-  - component: {fileID: 114520521469386868}
   - component: {fileID: 65961905173126602}
-  - component: {fileID: 114772612212761884}
+  - component: {fileID: 114520521469386868}
+  - component: {fileID: 114963026102828806}
+  - component: {fileID: 114774580038606504}
   - component: {fileID: 198650506086164460}
   - component: {fileID: 199032242849868036}
   m_Layer: 10
@@ -158,13 +159,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileOwner: {fileID: 0}
-  explosionForce: 120
-  explosionRadius: 3
   gravity: 0
   speed: 20
   acceleration: 0
   lifeTime: 50
---- !u!114 &114772612212761884
+--- !u!114 &114774580038606504
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,9 +171,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1290245525039842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92901522aa47046a98b968d738413c58, type: 3}
+  m_Script: {fileID: 11500000, guid: b612a89ef81c94287b5de16c6deded87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114963026102828806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1290245525039842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69abb7197856f46e7b1c531d2fecda33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionForce: 120
+  explosionRadius: 3
 --- !u!136 &136515002995986538
 CapsuleCollider:
   m_ObjectHideFlags: 1
