@@ -29,36 +29,27 @@ namespace ExplosionJumping.Weapon {
 
         // Update is called once per frame
         void Update() {
-            if(timeUntilNextShotPrimary > 0) {
+            if (timeUntilNextShotPrimary > 0) {
                 timeUntilNextShotPrimary -= Time.deltaTime;
             }
-            if(timeUntilNextShotSecondary > 0) {
+            if (timeUntilNextShotSecondary > 0) {
                 timeUntilNextShotSecondary -= Time.deltaTime;
             }
-            if(fullAuto) {
-                if(Input.GetKey(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
-                    OnPrimaryFire();
-                    timeUntilNextShotPrimary = fireRatePrimary;
+            if (GetKeyModified(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
+                OnPrimaryFire();
+                timeUntilNextShotPrimary = fireRatePrimary;
+                if (animator != null) {
                     animator.SetBool("Fired", true);
-                } else {
+                }
+            }
+            else {
+                if (animator != null) {
                     animator.SetBool("Fired", false);
                 }
-                if(Input.GetKey(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
-                    OnSecondaryFire();
-                    timeUntilNextShotSecondary = fireRateSecondary;
-                }
-            } else {
-                if(Input.GetKeyDown(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
-                    OnPrimaryFire();
-                    timeUntilNextShotPrimary = fireRatePrimary;
-                    animator.SetBool("Fired", true);
-                } else {
-                    animator.SetBool("Fired", false);
-                }
-                if (Input.GetKeyDown(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
-                    OnSecondaryFire();
-                    timeUntilNextShotSecondary = fireRateSecondary;
-                }
+            }
+            if (GetKeyModified(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
+                OnSecondaryFire();
+                timeUntilNextShotSecondary = fireRateSecondary;
             }
         }
 
@@ -71,15 +62,23 @@ namespace ExplosionJumping.Weapon {
 
         public void Fire() {
             Transform projectileSpawn;
-            if(firesFromCamera) {
+            if (firesFromCamera) {
                 projectileSpawn = owner.transform.GetChild(0);
-            } else {
+            }
+            else {
                 projectileSpawn = transform;
             }
 
             GameObject spawned = Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
             spawned.GetComponent<ExplosiveProjectileController>().projectileOwner = owner;
             spawned.GetComponent<Rigidbody>().velocity = projectileSpawn.transform.forward * spawned.GetComponent<ExplosiveProjectileController>().speed;
+        }
+
+        private bool GetKeyModified(KeyCode key) {
+            if (fullAuto) {
+                return Input.GetKey(key);
+            }
+            return Input.GetKeyDown(key);
         }
     }
 }
