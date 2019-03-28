@@ -23,8 +23,6 @@ namespace ExplosionJumping.Weapon.Projectile {
         void Start() {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.useGravity = gravity;
-            Physics.IgnoreLayerCollision(9, 10);
-            Physics.IgnoreLayerCollision(10, 11);
         }
 
         // Update is called once per frame

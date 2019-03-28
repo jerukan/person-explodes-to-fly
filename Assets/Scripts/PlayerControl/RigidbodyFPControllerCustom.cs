@@ -186,7 +186,7 @@ namespace ExplosionJumping.PlayerControl {
             RaycastHit hitInfo;
 
             if (Physics.SphereCast(transform.position, capsuleCollider.radius * 1f, Vector3.down, out hitInfo,
-                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore)) {
+                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
                 Vector3 topOfCollider = hitInfo.collider.bounds.center + new Vector3(0f, hitInfo.collider.bounds.extents.y, 0f);
                 float heightDifference = topOfCollider.y - transform.TransformPoint(capsuleCollider.center - new Vector3(0f, capsuleCollider.height / 2, 0f)).y;
@@ -267,7 +267,7 @@ namespace ExplosionJumping.PlayerControl {
 
         private float GetSlideFriction() {
             float angle = Vector3.SignedAngle(Vector3.up, groundContactNormal, transform.right);
-            Debug.Log($"AGNGLE {angle}");
+            //Debug.Log($"AGNGLE {angle}");
             return slideFrictionModifier.Evaluate(angle);
         }
     }
