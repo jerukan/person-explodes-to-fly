@@ -7,6 +7,7 @@ namespace ExplosionJumping.Weapon.Projectile.Trigger {
     public class ExplosionTrigger : MonoBehaviour {
 
         protected ExplosionController explosionController;
+        private bool triggered;
 
         // Use this for initialization
         private void Start() {
@@ -19,7 +20,10 @@ namespace ExplosionJumping.Weapon.Projectile.Trigger {
         }
 
         protected void Trigger() {
-            explosionController.Explode();
+            if (!triggered) {
+                triggered = true;
+                explosionController.Explode();
+            }
         }
     }
 }
