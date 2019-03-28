@@ -20,14 +20,10 @@ namespace ExplosionJumping.PlayerControl.AirControl {
         public override void AirStafe(Vector2 input) {
             // linear movement calculations
             // all angle calculations use bearing, so clockwise is positive angle.
-            Vector3 velocityWorld = rigidBody.velocity;
-            velocityWorld.y = 0;
-            Vector3 velocityRelative = transform.InverseTransformDirection(velocityWorld);
-            Vector3 inputRelative = new Vector3(input.x, 0, input.y);
-            //Debug.DrawRay(transform.position, velocityVec3World);
-            //Debug.DrawRay(transform.position, transform.forward * 10, Color.magenta);
+            Vector3 velocityRelative = transform.InverseTransformDirection(rigidBody.velocity);
+            velocityRelative.y = 0;
 
-            Vector3 accelVector = new Vector3(inputRelative.normalized.x * linearAcceleration, 0, inputRelative.normalized.z * linearAcceleration);
+            Vector3 accelVector = new Vector3(input.normalized.x * linearAcceleration, 0, input.normalized.y * linearAcceleration);
             Vector3 predictedVelocity = velocityRelative + accelVector;
 
             if(Math.Abs(predictedVelocity.x) > linearAccelerationLimit) {

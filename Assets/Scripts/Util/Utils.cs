@@ -74,5 +74,17 @@ namespace ExplosionJumping.Util {
             }
             return -1;
         }
+
+        public static void LogValue(String label, float value) {
+            Debug.Log($"{label}: {value}");
+        }
+
+        public static void LogValue(String label, int value) {
+            Debug.Log($"{label}: {value}");
+        }
+
+        public static void LogValue(String label, bool value) {
+            Debug.Log($"{label}: {value}");
+        }
     }
 }

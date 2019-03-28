@@ -1,5 +1,6 @@
 ﻿using System;
 using ExplosionJumping.PlayerControl.AirControl;
+using ExplosionJumping.Util;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl {
@@ -65,12 +66,21 @@ namespace ExplosionJumping.PlayerControl {
         private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
         private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
 
+        private Vector3 predictedLandingSpot;
+
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
         }
 
         public bool Grounded {
             get { return grounded; }
+        }
+
+        public Vector3 PlayerBottom {
+            get {
+                Vector3 colliderWorldCenter = transform.TransformPoint(capsuleCollider.center);
+                return new Vector3(colliderWorldCenter.x, colliderWorldCenter.y - capsuleCollider.height / 2, colliderWorldCenter.z);
+            }
         }
 
         private void Awake() {
@@ -126,9 +136,10 @@ namespace ExplosionJumping.PlayerControl {
                 }
             }
             else {
+                UpdatePredictedLandingSpot();
                 ticksOnGround = 0;
                 totalTicksInAir++;
-                rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * gravityMultiplier * rigidBody.mass, 0f), ForceMode.Force);
+                rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * gravityMultiplier, 0f), ForceMode.Acceleration);
                 airStrafeController.AirStafe(input);
                 if(sliding) {
                     //rigidBody.velocity *= GetSlideFriction();
@@ -140,6 +151,10 @@ namespace ExplosionJumping.PlayerControl {
                 transform.Translate(new Vector3(0f, toClimb, 0f));
                 canAutoClimb = false;
             }
+        }
+
+        private void OnDrawGizmos() {
+            Gizmos.DrawWireSphere(predictedLandingSpot, 2);
         }
 
         private void AccelerateToSpeed(Vector2 input) {
@@ -190,14 +205,14 @@ namespace ExplosionJumping.PlayerControl {
                 groundContactNormal = hitInfo.normal;
                 Vector3 topOfCollider = hitInfo.collider.bounds.center + new Vector3(0f, hitInfo.collider.bounds.extents.y, 0f);
                 float heightDifference = topOfCollider.y - transform.TransformPoint(capsuleCollider.center - new Vector3(0f, capsuleCollider.height / 2, 0f)).y;
-                //Debug.Log($"Height difference: {heightDifference}");
+                //Utils.LogValue("Height difference", heightDifference);
                 if(heightDifference < autoClimbMaxHeight && Vector3.Angle(groundContactNormal, Vector3.up) > 70f) {
                     canAutoClimb = true;
                     toClimb = heightDifference;
                 } else {
                     canAutoClimb = false;
                 }
-                //Debug.Log(Vector3.Angle(groundContactNormal, Vector3.up));
+                //Utils.LogValue("Ground contact angle", Vector3.Angle(groundContactNormal, Vector3.up));
                 if (Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed || CanSlide()) {
                     grounded = false;
                     sliding = true;
@@ -212,6 +227,15 @@ namespace ExplosionJumping.PlayerControl {
                 sliding = false;
                 groundContactNormal = Vector3.up;
             }
+        }
+
+        private void UpdatePredictedLandingSpot() {
+            AirPath path = new AirPath(PlayerBottom, Velocity);
+            RaycastHit hitinfo;
+            Physics.Raycast(PlayerBottom, Vector3.down, out hitinfo, 5000, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
+            float timetoground = path.GetTimeToGround(hitinfo.distance);
+            //Utils.LogValue("Time until impact", timetoground);
+            predictedLandingSpot = path.GetPosition(timetoground);
         }
 
         private void UpdateDesiredTargetSpeed(Vector2 input) {
