@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 114391502314979226}
   - component: {fileID: 114762123195891280}
   - component: {fileID: 114508855472955520}
+  - component: {fileID: 114196458716714180}
   m_Layer: 9
   m_Name: RigidBodyFPSCustom
   m_TagString: Player
@@ -388,6 +389,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &114196458716714180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830071249688946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fafee9f524f4919ab72f25962f27a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landingIndicatorPrefab: {fileID: 1281365869355268, guid: 835e59da4ce3b443cb6b723dcd6c8b90,
+    type: 2}
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1

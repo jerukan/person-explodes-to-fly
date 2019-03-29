@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac09df2760cb1465396032bca7777442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  armTime: 0.8
   detonationKey: 324
 --- !u!114 &114874192961721212
 MonoBehaviour:

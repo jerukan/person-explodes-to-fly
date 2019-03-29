@@ -66,21 +66,12 @@ namespace ExplosionJumping.PlayerControl {
         private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
         private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
 
-        private Vector3 predictedLandingSpot;
-
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
         }
 
         public bool Grounded {
             get { return grounded; }
-        }
-
-        public Vector3 PlayerBottom {
-            get {
-                Vector3 colliderWorldCenter = transform.TransformPoint(capsuleCollider.center);
-                return new Vector3(colliderWorldCenter.x, colliderWorldCenter.y - capsuleCollider.height / 2, colliderWorldCenter.z);
-            }
         }
 
         private void Awake() {
@@ -136,7 +127,6 @@ namespace ExplosionJumping.PlayerControl {
                 }
             }
             else {
-                UpdatePredictedLandingSpot();
                 ticksOnGround = 0;
                 totalTicksInAir++;
                 rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * gravityMultiplier, 0f), ForceMode.Acceleration);
@@ -151,10 +141,6 @@ namespace ExplosionJumping.PlayerControl {
                 transform.Translate(new Vector3(0f, toClimb, 0f));
                 canAutoClimb = false;
             }
-        }
-
-        private void OnDrawGizmos() {
-            Gizmos.DrawWireSphere(predictedLandingSpot, 2);
         }
 
         private void AccelerateToSpeed(Vector2 input) {
@@ -227,15 +213,6 @@ namespace ExplosionJumping.PlayerControl {
                 sliding = false;
                 groundContactNormal = Vector3.up;
             }
-        }
-
-        private void UpdatePredictedLandingSpot() {
-            AirPath path = new AirPath(PlayerBottom, Velocity);
-            RaycastHit hitinfo;
-            Physics.Raycast(PlayerBottom, Vector3.down, out hitinfo, 5000, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
-            float timetoground = path.GetTimeToGround(hitinfo.distance);
-            //Utils.LogValue("Time until impact", timetoground);
-            predictedLandingSpot = path.GetPosition(timetoground);
         }
 
         private void UpdateDesiredTargetSpeed(Vector2 input) {

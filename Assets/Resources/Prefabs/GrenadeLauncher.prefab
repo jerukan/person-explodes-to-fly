@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 1862424628948292, guid: 1cdc8b7c6371843cc97fb26068689c4d, type: 2}
   firesFromCamera: 1
-  fireRatePrimary: 0.6
+  fireRatePrimary: 0.5
   fireRateSecondary: 0
   fullAuto: 1
   weaponOffset: {x: 0.4, y: -0.3, z: 0.5}

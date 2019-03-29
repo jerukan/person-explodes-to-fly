@@ -9,6 +9,7 @@ namespace ExplosionJumping.PlayerControl.AirControl {
     [RequireComponent(typeof(RigidbodyFPControllerCustom))]
     public abstract class PlayerAirController : MonoBehaviour {
 
+        // cached variables for easy access
         protected Rigidbody rigidBody;
         protected Camera cam;
 

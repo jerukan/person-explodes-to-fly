@@ -13,10 +13,13 @@ namespace ExplosionJumping.Weapon.Projectile.Explosion {
         protected Rigidbody rigidBody;
         protected ParticleSystem particles;
 
-        private void Start() {
+        private void Awake() {
             projectileController = GetComponent<ExplosiveProjectileController>();
             rigidBody = GetComponent<Rigidbody>();
             particles = GetComponent<ParticleSystem>();
+        }
+
+        private void Start() {
             Invoke("Explode", projectileController.lifeTime);
         }
 

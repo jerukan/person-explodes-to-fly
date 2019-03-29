@@ -8,12 +8,10 @@ namespace ExplosionJumping.PlayerControl {
 
         private RigidbodyFPControllerCustom charController;
 
-        // Use this for initialization
-        private void Start() {
+        private void Awake() {
             charController = GetComponent<RigidbodyFPControllerCustom>();
         }
 
-        // Update is called once per frame
         private void Update() {
             Transform camTransform = Camera.main.transform;
             if(Input.GetKeyDown(KeyCode.LeftShift)) {

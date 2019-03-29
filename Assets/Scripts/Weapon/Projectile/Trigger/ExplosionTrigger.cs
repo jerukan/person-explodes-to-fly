@@ -9,14 +9,8 @@ namespace ExplosionJumping.Weapon.Projectile.Trigger {
         protected ExplosionController explosionController;
         private bool triggered;
 
-        // Use this for initialization
-        private void Start() {
+        private void Awake() {
             explosionController = GetComponent<ExplosionController>();
-        }
-
-        // Update is called once per frame
-        private void Update() {
-
         }
 
         protected void Trigger() {

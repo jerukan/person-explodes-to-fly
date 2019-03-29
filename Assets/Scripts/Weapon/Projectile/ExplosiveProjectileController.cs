@@ -19,15 +19,9 @@ namespace ExplosionJumping.Weapon.Projectile {
 
         protected Rigidbody rigidBody;
 
-        // Use this for initialization
-        void Start() {
+        private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.useGravity = gravity;
-        }
-
-        // Update is called once per frame
-        void Update() {
-            
         }
 
         private void FixedUpdate() {

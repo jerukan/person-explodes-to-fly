@@ -8,6 +8,7 @@ namespace ExplosionJumping.Weapon {
 
         public GameObject projectile;
         public bool firesFromCamera;
+        [Tooltip("The seconds between each shot.")]
         public float fireRatePrimary;
         public float fireRateSecondary;
         public bool fullAuto;
