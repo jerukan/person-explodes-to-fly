@@ -2,7 +2,7 @@
 using ExplosionJumping.Util;
 using UnityEngine;
 
-namespace ExplosionJumping.PlayerControl.AirControl {
+namespace ExplosionJumping.PlayerControl.Movement.AirControl {
     /// <summary>
     /// Controls how the player moves in the air.
     /// </summary>

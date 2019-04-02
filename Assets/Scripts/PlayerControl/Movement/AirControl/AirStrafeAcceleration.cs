@@ -3,7 +3,7 @@ using System.Collections;
 using ExplosionJumping.Util;
 using System;
 
-namespace ExplosionJumping.PlayerControl.AirControl {
+namespace ExplosionJumping.PlayerControl.Movement.AirControl {
     /// <summary>
     /// This version of air control is taken straight from how the Source Engine handles air movement.
     /// </summary>

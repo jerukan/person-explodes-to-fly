@@ -1,9 +1,9 @@
 ﻿using System;
-using ExplosionJumping.PlayerControl.AirControl;
+using ExplosionJumping.PlayerControl.Movement.AirControl;
 using ExplosionJumping.Util;
 using UnityEngine;
 
-namespace ExplosionJumping.PlayerControl {
+namespace ExplosionJumping.PlayerControl.Movement {
     /// <summary>
     /// Ripped straight from RigidbodyFirstPersonController from the standard assets with many modifications.
     /// </summary>
@@ -11,7 +11,7 @@ namespace ExplosionJumping.PlayerControl {
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(PlayerAirController))]
     public class RigidbodyFPControllerCustom : MonoBehaviour {
-
+        
         public Camera cam;
         public MouseLook mouseLook = new MouseLook();
 
@@ -50,8 +50,7 @@ namespace ExplosionJumping.PlayerControl {
         public float maxSlopeAllowed = 45f;
         public float requiredVelocityToSlide = 10f;
         public float requiredAngleToSlide = 5f; // in degrees
-        public float autoClimbMaxHeight = 0.05f;
-        public AnimationCurve slideFrictionModifier = new AnimationCurve(new Keyframe(-90f, 1f), new Keyframe(-45f, 1f), new Keyframe(0f, 0.95f), new Keyframe(45f, 0.9f), new Keyframe(90f, 0f));
+        public float autoClimbMaxHeight = 0.05f; // TODO fixfixfix
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
@@ -264,12 +263,6 @@ namespace ExplosionJumping.PlayerControl {
 
         private bool CanSlide() {
             return !grounded && rigidBody.velocity.sqrMagnitude > requiredVelocityToSlide * requiredVelocityToSlide && Vector3.Angle(groundContactNormal, Vector3.up) > requiredAngleToSlide;
-        }
-
-        private float GetSlideFriction() {
-            float angle = Vector3.SignedAngle(Vector3.up, groundContactNormal, transform.right);
-            //Debug.Log($"AGNGLE {angle}");
-            return slideFrictionModifier.Evaluate(angle);
         }
     }
 }

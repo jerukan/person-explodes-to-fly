@@ -12,16 +12,17 @@ namespace ExplosionJumping.Weapon.Projectile {
     [RequireComponent(typeof(ExplosionController))]
     public class ExplosiveProjectileController : MonoBehaviour {
         [HideInInspector]public PlayerController projectileOwner;
-        public bool gravity;
+        public int damage;
         public float speed;
         public float acceleration;
         public float lifeTime;
+        public bool usesGravity;
 
         protected Rigidbody rigidBody;
 
         private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
-            rigidBody.useGravity = gravity;
+            rigidBody.useGravity = usesGravity;
         }
 
         private void FixedUpdate() {

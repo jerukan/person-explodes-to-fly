@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ExplosionJumping.PlayerControl.AirControl {
+namespace ExplosionJumping.PlayerControl.Movement.AirControl {
     /// <summary>
     /// Player velocity is set to face whatever direction is being faced.
     /// </summary>

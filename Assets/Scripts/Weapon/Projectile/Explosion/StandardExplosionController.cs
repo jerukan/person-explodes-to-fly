@@ -12,13 +12,14 @@ namespace ExplosionJumping.Weapon.Projectile.Explosion {
                 if (hitCollider.GetComponent<PlayerController>() != null) {
                     Rigidbody hitBody = hitCollider.GetComponent<Rigidbody>();
                     hitBody.AddExplosionForce(explosionForce, explosionPos, explosionRadius, 0f, ForceMode.Impulse);
+                    hitCollider.GetComponent<PlayerController>().AddHealth(-(explosionRadius - (explosionPos - hitCollider.ClosestPoint(explosionPos)).magnitude) / explosionRadius * projectileController.damage);
                 }
             }
             rigidBody.isKinematic = true;
             GetComponent<Collider>().enabled = false;
             GetComponentInChildren<MeshRenderer>().enabled = false;
-            particles.Play();
-            Destroy(gameObject, particles.main.duration);
+            explosionParticles.Play();
+            Destroy(gameObject, explosionParticles.main.duration);
         }
     }
 }

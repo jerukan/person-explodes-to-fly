@@ -29,8 +29,12 @@ namespace ExplosionJumping.Util {
         }
 
         public float GetTimeToGround(float height) {
+            float discriminant = velocity.y * velocity.y - 4f * 0.5f * gravity.y * height;
+            if(discriminant < 0f) {
+                return 0f;
+            }
             // quadratic equation, solve for t, 1/2at^2 + v0t + s
-            return (-velocity.y - Mathf.Sqrt(velocity.y * velocity.y - 4f * 0.5f * gravity.y * height)) / (2 * 0.5f * gravity.y);
+            return (-velocity.y - Mathf.Sqrt(discriminant)) / (2 * 0.5f * gravity.y);
         }
 
         public float TimeUntilPeak() {

@@ -2,8 +2,13 @@
 using System.Collections;
 using ExplosionJumping.Util;
 
-namespace ExplosionJumping.PlayerControl {
-    public class AirTrajectoryPredictor : MonoBehaviour {
+namespace ExplosionJumping.PlayerControl.Movement {
+
+    /// <summary>
+    /// No iterative parts in the prediction.
+    /// Inaccurate with complex terrain since it only raycasts once from the player depending on velocity.
+    /// </summary>
+    public class AirTrajectoryPredictorInaccurate : MonoBehaviour {
 
         public GameObject landingIndicatorPrefab;
 
@@ -36,10 +41,6 @@ namespace ExplosionJumping.PlayerControl {
             }
             landingIndicator.transform.position = predictedLandingSpot;
             landingIndicator.transform.Translate(new Vector3(0f, 0.05f, 0f), Space.World);
-        }
-
-        private void OnDrawGizmos() {
-            //Gizmos.DrawWireSphere(predictedLandingSpot, 2);
         }
 
         public void UpdatePredictedLandingSpot(Vector3 velocity) {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace ExplosionJumping.PlayerControl {
+namespace ExplosionJumping.PlayerControl.Movement {
     /// <summary>
     /// Ripped straight from the Unity standard assets.
     /// </summary>

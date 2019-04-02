@@ -8,15 +8,14 @@ namespace ExplosionJumping.Weapon.Projectile.Explosion {
 
         public float explosionForce;
         public float explosionRadius;
+        public ParticleSystem explosionParticles;
 
         protected ExplosiveProjectileController projectileController;
         protected Rigidbody rigidBody;
-        protected ParticleSystem particles;
 
         private void Awake() {
             projectileController = GetComponent<ExplosiveProjectileController>();
             rigidBody = GetComponent<Rigidbody>();
-            particles = GetComponent<ParticleSystem>();
         }
 
         private void Start() {
