@@ -59,6 +59,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private bool jump, grounded, crouching, sliding;
         private bool canAutoClimb;
         private float toClimb;
+        private float height, radius;
 
         private float currentTargetSpeed = 8f;
         private int ticksOnGround; // time the player has spend on the ground in the duration of being grounded.
@@ -82,6 +83,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
             rigidBody.isKinematic = false;
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.isTrigger = false;
+            height = capsuleCollider.height;
+            radius = capsuleCollider.radius;
             airStrafeController = GetComponent<PlayerAirController>();
         }
 
@@ -106,7 +109,14 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private void FixedUpdate() {
             GroundCheck();
             //Debug.Log("Grounded: " + grounded);
+            bool wasCrouched = crouching;
             Vector2 input = GetInput();
+            if(crouching) {
+                SetHeight(height * 0.5f);
+            }
+            else {
+                SetHeight(height);
+            }
             if (grounded) {
                 // todo make totalTicksInAir not actually total ticks
                 if((totalTicksInAir - ticksWhenJumpedInAir) * Time.fixedDeltaTime < bunnyHopWindow / 2) {
@@ -123,6 +133,9 @@ namespace ExplosionJumping.PlayerControl.Movement {
                     // also prevents normal ground movement until the bunnyhop window goes past.
                     AccelerateToSpeed(input);
                     ZeroLowVelocity();
+                    if(crouching && !wasCrouched) {
+                        transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f));
+                    }
                 }
             }
             else {
@@ -130,9 +143,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 totalTicksInAir++;
                 rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * gravityMultiplier, 0f), ForceMode.Acceleration);
                 airStrafeController.AirStafe(input);
-                if(sliding) {
-                    //rigidBody.velocity *= GetSlideFriction();
-                }
             }
             CapHorizontalVelocity();
             jump = false;
@@ -215,6 +225,12 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void UpdateDesiredTargetSpeed(Vector2 input) {
+            if (Input.GetKey(crouchKey)) {
+                crouching = true;
+            }
+            else {
+                crouching = false;
+            }
             if (input == Vector2.zero) {
                 return;
             }
@@ -231,12 +247,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 //handled last as if strafing and moving forward at the same time forwards speed should take precedence
                 currentTargetSpeed = forwardSpeed;
             }
-            if (Input.GetKey(crouchKey)) {
+            if (crouching) {
                 currentTargetSpeed *= crouchMultiplier;
-                crouching = true;
-            }
-            else {
-                crouching = false;
             }
         }
 
@@ -263,6 +275,14 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         private bool CanSlide() {
             return !grounded && rigidBody.velocity.sqrMagnitude > requiredVelocityToSlide * requiredVelocityToSlide && Vector3.Angle(groundContactNormal, Vector3.up) > requiredAngleToSlide;
+        }
+
+        private void SetHeight(float desiredHeight) {
+            if(desiredHeight == capsuleCollider.height) { return; }
+            if(desiredHeight < capsuleCollider.radius * 2) {
+                desiredHeight = capsuleCollider.radius * 2;
+            }
+            capsuleCollider.height = desiredHeight;
         }
     }
 }

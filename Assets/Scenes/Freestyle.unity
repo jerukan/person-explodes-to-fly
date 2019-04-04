@@ -2285,7 +2285,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4517997388740126, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.214
       objectReference: {fileID: 0}
     - target: {fileID: 4517997388740126, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2320,6 +2320,16 @@ Prefab:
         type: 2}
       propertyPath: healthRegen
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 136645001950703814, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 2}
+      propertyPath: m_Height
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 136645001950703814, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}
