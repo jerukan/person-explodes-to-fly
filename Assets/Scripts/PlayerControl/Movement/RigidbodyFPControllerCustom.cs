@@ -11,7 +11,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(PlayerAirController))]
     public class RigidbodyFPControllerCustom : MonoBehaviour {
-        
+
         public Camera cam;
         public MouseLook mouseLook = new MouseLook();
 
@@ -27,7 +27,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public float crouchMultiplier = 0.5f;
         public KeyCode crouchKey = KeyCode.LeftControl;
         [Tooltip("The max possible horizontal speed the player can move at, even in the air.")]
-        public float maxSpeed = 400f;
+        public float maxHorizontalSpeed = 400f;
         [Tooltip("The maximum speed the player can be at before being considered at a standstill.")]
         public float lowestSpeedPossible = 0.0001f;
 
@@ -38,7 +38,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         [Header("Bunnyhopping")]
 
-        [Tooltip("Window of time in seconds where a premature/late jump will preserve momentum.")]
+        [Tooltip("Window of time in seconds where a premature/late jump will preserve momentum. Setting it too high will make the player too slippery when landing.")]
         public float bunnyHopWindow = 0.2f;
         [Tooltip("Allows the user to hold down jump to continuously bunnyhop perfectly.")]
         public bool autoBunnyHop;
@@ -108,7 +108,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         private void FixedUpdate() {
             GroundCheck();
-            //Debug.Log("Grounded: " + grounded);
             bool wasCrouched = crouching;
             Vector2 input = GetInput();
             if(crouching) {
@@ -118,13 +117,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 SetHeight(height);
             }
             if (grounded) {
-                // todo make totalTicksInAir not actually total ticks
                 if((totalTicksInAir - ticksWhenJumpedInAir) * Time.fixedDeltaTime < bunnyHopWindow / 2) {
                     jump = true;
-                    //ticksWhenJumpedInAir = 0;
                 }
                 ticksOnGround++;
-                //ticksInAir = 0;
                 if (jump) {
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
                     rigidBody.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.VelocityChange);
@@ -134,7 +130,12 @@ namespace ExplosionJumping.PlayerControl.Movement {
                     AccelerateToSpeed(input);
                     ZeroLowVelocity();
                     if(crouching && !wasCrouched) {
-                        transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f));
+                        transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f), Space.World);
+                    }
+                    if (canAutoClimb) {
+                        Debug.Log("autoclimbing");
+                        transform.Translate(new Vector3(0f, toClimb, 0f), Space.World);
+                        canAutoClimb = false;
                     }
                 }
             }
@@ -146,10 +147,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
             }
             CapHorizontalVelocity();
             jump = false;
-            if(canAutoClimb) {
-                transform.Translate(new Vector3(0f, toClimb, 0f));
-                canAutoClimb = false;
-            }
         }
 
         private void AccelerateToSpeed(Vector2 input) {
@@ -179,7 +176,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             // get the rotation before it's changed
             float oldYRotation = transform.eulerAngles.y;
 
-            mouseLook.LookRotation(transform, cam.transform);
+            mouseLook.LookRotation(transform, cam.transform, true);
 
             if (grounded) {
                 // Rotate the rigidbody velocity to match the new direction that the character is looking
@@ -201,7 +198,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 Vector3 topOfCollider = hitInfo.collider.bounds.center + new Vector3(0f, hitInfo.collider.bounds.extents.y, 0f);
                 float heightDifference = topOfCollider.y - transform.TransformPoint(capsuleCollider.center - new Vector3(0f, capsuleCollider.height / 2, 0f)).y;
                 //Utils.LogValue("Height difference", heightDifference);
-                if(heightDifference < autoClimbMaxHeight && Vector3.Angle(groundContactNormal, Vector3.up) > 70f) {
+                if(heightDifference < autoClimbMaxHeight && Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
                     canAutoClimb = true;
                     toClimb = heightDifference;
                 } else {
@@ -221,6 +218,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 grounded = false;
                 sliding = false;
                 groundContactNormal = Vector3.up;
+                //LOLOLOLOL
             }
         }
 
@@ -255,8 +253,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private void CapHorizontalVelocity() {
             Vector3 velocityNoY = rigidBody.velocity;
             velocityNoY.y = 0;
-            if (velocityNoY.sqrMagnitude > maxSpeed * maxSpeed) {
-                velocityNoY = velocityNoY.normalized * maxSpeed;
+            if (velocityNoY.sqrMagnitude > maxHorizontalSpeed * maxHorizontalSpeed) {
+                velocityNoY = velocityNoY.normalized * maxHorizontalSpeed;
                 rigidBody.velocity = new Vector3(velocityNoY.x, rigidBody.velocity.y, velocityNoY.z);
             }
         }

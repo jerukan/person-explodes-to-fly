@@ -8,7 +8,6 @@ namespace ExplosionJumping.Weapon.Projectile.Explosion {
 
         public float explosionForce;
         public float explosionRadius;
-        public ParticleSystem explosionParticles;
 
         protected ExplosiveProjectileController projectileController;
         protected Rigidbody rigidBody;

@@ -15,20 +15,17 @@ namespace ExplosionJumping.Weapon {
 
         public Vector3 weaponOffset;
 
-        public KeyCode primaryFireKey = KeyCode.Mouse0;
-        public KeyCode secondaryFireKey = KeyCode.Mouse1;
-
         [HideInInspector] public PlayerController owner;
         private Animator animator;
+        private bool primaryFired;
+        private bool secondaryFired;
         private float timeUntilNextShotPrimary;
         private float timeUntilNextShotSecondary;
 
-        // Use this for initialization
-        void Start() {
+        void Awake() {
             animator = GetComponentInChildren<Animator>();
         }
 
-        // Update is called once per frame
         void Update() {
             if (timeUntilNextShotPrimary > 0) {
                 timeUntilNextShotPrimary -= Time.deltaTime;
@@ -36,26 +33,27 @@ namespace ExplosionJumping.Weapon {
             if (timeUntilNextShotSecondary > 0) {
                 timeUntilNextShotSecondary -= Time.deltaTime;
             }
-            if (GetKeyModified(primaryFireKey) && timeUntilNextShotPrimary <= 0) {
-                OnPrimaryFire();
-                timeUntilNextShotPrimary = fireRatePrimary;
-                if (animator != null) {
-                    animator.SetBool("Fired", true);
-                }
-            }
-            else {
-                if (animator != null) {
+            if (timeUntilNextShotPrimary > 0) {                
+                if (animator != null && !primaryFired) {
                     animator.SetBool("Fired", false);
+                } else {
+                    primaryFired = false;
                 }
             }
-            if (GetKeyModified(secondaryFireKey) && timeUntilNextShotSecondary <= 0) {
-                OnSecondaryFire();
-                timeUntilNextShotSecondary = fireRateSecondary;
+            if (timeUntilNextShotSecondary > 0) {
+                // animator thing?
             }
         }
 
         public void OnPrimaryFire() {
-            Fire();
+            if (timeUntilNextShotPrimary <= 0) {
+                Fire();
+                timeUntilNextShotPrimary = fireRatePrimary;
+                primaryFired = true;
+                if (animator != null) {
+                    animator.SetBool("Fired", true);
+                }
+            }
         }
 
         public void OnSecondaryFire() {
@@ -75,7 +73,7 @@ namespace ExplosionJumping.Weapon {
             spawned.GetComponent<Rigidbody>().velocity = projectileSpawn.transform.forward * spawned.GetComponent<ExplosiveProjectileController>().speed;
         }
 
-        private bool GetKeyModified(KeyCode key) {
+        public bool GetKeyModified(KeyCode key) {
             if (fullAuto) {
                 return Input.GetKey(key);
             }

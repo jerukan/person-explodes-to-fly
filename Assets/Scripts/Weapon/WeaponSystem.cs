@@ -7,6 +7,8 @@ namespace ExplosionJumping.Weapon {
     public class WeaponSystem : MonoBehaviour {
 
         public WeaponController[] weaponPrefabs;
+        public KeyCode primaryFireButton = KeyCode.Mouse0;
+        public KeyCode secondaryFireButton = KeyCode.Mouse1;
 
         private WeaponController[] weapons;
         private int prevWeaponIndex;
@@ -38,8 +40,15 @@ namespace ExplosionJumping.Weapon {
             } else if(scrolled > 0f) {
                 CycleWeapon(false);
             }
-            int numberPressed = Utils.GetNumberPressed();
+            int numberPressed = InputUtils.GetNumberPressed();
             SetCurrentWeapon(numberPressed - 1);
+
+            if(CurrentWeapon.GetKeyModified(primaryFireButton)) {
+                CurrentWeapon.OnPrimaryFire();
+            }
+            if(CurrentWeapon.GetKeyModified(secondaryFireButton)) {
+                CurrentWeapon.OnSecondaryFire();
+            }
         }
 
         public void CycleWeapon(bool backward) {

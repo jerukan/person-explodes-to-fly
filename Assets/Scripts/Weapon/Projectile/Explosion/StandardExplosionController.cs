@@ -4,6 +4,8 @@ using ExplosionJumping.PlayerControl;
 
 namespace ExplosionJumping.Weapon.Projectile.Explosion {
     public class StandardExplosionController : ExplosionController {
+
+        public ParticleSystem explosionParticles;
         
         public override void Explode() {
             Vector3 explosionPos = transform.position;
@@ -11,8 +13,8 @@ namespace ExplosionJumping.Weapon.Projectile.Explosion {
             foreach (Collider hitCollider in hit) {
                 if (hitCollider.GetComponent<PlayerController>() != null) {
                     Rigidbody hitBody = hitCollider.GetComponent<Rigidbody>();
+                    hitCollider.GetComponent<PlayerController>().TakeDamageFromExplosion(explosionPos, explosionRadius, projectileController);
                     hitBody.AddExplosionForce(explosionForce, explosionPos, explosionRadius, 0f, ForceMode.Impulse);
-                    hitCollider.GetComponent<PlayerController>().AddHealth(-(explosionRadius - (explosionPos - hitCollider.ClosestPoint(explosionPos)).magnitude) / explosionRadius * projectileController.damage);
                 }
             }
             rigidBody.isKinematic = true;

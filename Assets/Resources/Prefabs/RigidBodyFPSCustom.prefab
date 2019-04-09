@@ -11,6 +11,23 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1830071249688946}
   m_IsPrefabAsset: 1
+--- !u!1 &1030010329544252
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4173752826700986}
+  - component: {fileID: 20476344785561388}
+  - component: {fileID: 81790771324032560}
+  m_Layer: 0
+  m_Name: DeathCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1145021498028812
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,6 +93,8 @@ GameObject:
   - component: {fileID: 54933190322676436}
   - component: {fileID: 136645001950703814}
   - component: {fileID: 114391502314979226}
+  - component: {fileID: 114437883547269092}
+  - component: {fileID: 114796448674050630}
   - component: {fileID: 114508855472955520}
   - component: {fileID: 114081812441207190}
   - component: {fileID: 114762123195891280}
@@ -96,8 +115,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4173752826700986}
   m_Father: {fileID: 4517997388740126}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4173752826700986
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030010329544252}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4134208786079690}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4517997388740126
@@ -107,7 +140,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1830071249688946}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 3.16, z: 0}
+  m_LocalPosition: {x: 0, y: 3.214, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4134208786079690}
@@ -164,7 +197,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -176,6 +209,46 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!20 &20476344785561388
+Camera:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030010329544252}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 90
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -300,6 +373,13 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1291198118404034}
   m_Enabled: 1
+--- !u!81 &81790771324032560
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1030010329544252}
+  m_Enabled: 1
 --- !u!114 &114081812441207190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -313,11 +393,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 20391502722244772}
   mouseLook:
-    XSensitivity: 1.25
-    YSensitivity: 1.25
+    XSensitivity: 1.5
+    YSensitivity: 1.5
     clampVerticalRotation: 1
-    MinimumX: -90
-    MaximumX: 90
+    MinimumX: -89
+    MaximumX: 89
     smooth: 0
     smoothTime: 5
     lockCursor: 1
@@ -327,7 +407,7 @@ MonoBehaviour:
   groundAccelerationRate: 0.2
   crouchMultiplier: 0.5
   crouchKey: 306
-  maxSpeed: 400
+  maxHorizontalSpeed: 400
   lowestSpeedPossible: 0.0001
   jumpForce: 5
   gravityMultiplier: 1
@@ -337,7 +417,7 @@ MonoBehaviour:
   maxSlopeAllowed: 45
   requiredVelocityToSlide: 10
   requiredAngleToSlide: 5
-  autoClimbMaxHeight: 0.5
+  autoClimbMaxHeight: 0.05
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -350,8 +430,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 200
-  healthRegen: 20
-  healthSlider: {fileID: 0}
+  healthRegen: 100
+  deathCamera: {fileID: 20476344785561388}
+--- !u!114 &114437883547269092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830071249688946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939415f4e5b2b4d6dbc7b49cb7a23f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnPosition: {fileID: 0}
+  respawnTime: 5
 --- !u!114 &114508855472955520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,6 +459,8 @@ MonoBehaviour:
   weaponPrefabs:
   - {fileID: 114580479567636246, guid: 7827d3a98892b441b93a55e80e983783, type: 2}
   - {fileID: 114450041212092134, guid: 6e21b60bac73e4863bc3f9b8b3faf62b, type: 2}
+  primaryFireButton: 323
+  secondaryFireButton: 324
 --- !u!114 &114762123195891280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -379,6 +474,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linearAccelerationLimit: 1
   linearAcceleration: 0.5
+--- !u!114 &114796448674050630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830071249688946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b374b04701e724b2f843e591dfd0de93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 0}
+  healthText: {fileID: 0}
+  respawnDisplay: {fileID: 0}
+  respawnTimerText: {fileID: 0}
 --- !u!114 &114834855372642138
 MonoBehaviour:
   m_ObjectHideFlags: 1

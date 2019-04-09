@@ -2,11 +2,13 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour {
+namespace ExplosionJumping.UI {
+    public class SceneLoader : MonoBehaviour {
 
-    public string sceneName;
+        public string sceneName;
 
-    public void LoadScene() {
-        SceneManager.LoadScene(sceneName);
+        public void LoadScene() {
+            SceneManager.LoadScene(sceneName);
+        }
     }
 }

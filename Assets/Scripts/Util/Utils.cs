@@ -2,6 +2,7 @@
 using UnityEngine;
 
 namespace ExplosionJumping.Util {
+    
     public static class Utils {
 
         public static Vector2 RotateVector(Vector2 vector, float degrees) {
@@ -41,6 +42,21 @@ namespace ExplosionJumping.Util {
             return num;
         }
 
+        public static void LogValue(String label, float value) {
+            Debug.Log($"{label}: {value}");
+        }
+
+        public static void LogValue(String label, int value) {
+            Debug.Log($"{label}: {value}");
+        }
+
+        public static void LogValue(String label, bool value) {
+            Debug.Log($"{label}: {value}");
+        }
+    }
+
+    public static class InputUtils {
+        
         public static int GetNumberPressed() {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 return 1;
@@ -75,16 +91,14 @@ namespace ExplosionJumping.Util {
             return -1;
         }
 
-        public static void LogValue(String label, float value) {
-            Debug.Log($"{label}: {value}");
-        }
-
-        public static void LogValue(String label, int value) {
-            Debug.Log($"{label}: {value}");
-        }
-
-        public static void LogValue(String label, bool value) {
-            Debug.Log($"{label}: {value}");
+        public static void LockCursor(bool shouldLock) {
+            if (shouldLock) {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            Cursor.visible = !shouldLock;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
 
 namespace ExplosionJumping.PlayerControl.Movement {
     /// <summary>
@@ -17,7 +16,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public float smoothTime = 5f;
         public bool lockCursor = true;
 
-
         private Quaternion m_CharacterTargetRot;
         private Quaternion m_CameraTargetRot;
         private bool m_cursorIsLocked = true;
@@ -27,13 +25,17 @@ namespace ExplosionJumping.PlayerControl.Movement {
             m_CameraTargetRot = camera.localRotation;
         }
 
-
-        public void LookRotation(Transform character, Transform camera) {
-            float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
-            float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
+        public void LookRotation(Transform character, Transform camera, bool rotateCharacter) {
+            float yRot = Input.GetAxis("Mouse X") * XSensitivity;
+            float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
 
             m_CharacterTargetRot *= Quaternion.Euler(0f, yRot, 0f);
-            m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
+            if (rotateCharacter) {
+                m_CameraTargetRot *= Quaternion.Euler(-xRot, 0f, 0f);
+            }
+            else {
+                m_CameraTargetRot *= Quaternion.Euler(-xRot, yRot, 0f);
+            }
 
             if (clampVerticalRotation)
                 m_CameraTargetRot = ClampRotationAroundXAxis(m_CameraTargetRot);
@@ -45,7 +47,9 @@ namespace ExplosionJumping.PlayerControl.Movement {
                     smoothTime * Time.deltaTime);
             }
             else {
-                character.localRotation = m_CharacterTargetRot;
+                if (rotateCharacter) {
+                    character.localRotation = m_CharacterTargetRot;
+                }
                 camera.localRotation = m_CameraTargetRot;
             }
 
@@ -98,6 +102,5 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
             return q;
         }
-
     }
 }
