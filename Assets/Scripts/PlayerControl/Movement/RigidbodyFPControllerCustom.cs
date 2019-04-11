@@ -74,6 +74,12 @@ namespace ExplosionJumping.PlayerControl.Movement {
             get { return grounded; }
         }
 
+        public Vector3 ColliderBottom {
+            get {
+                return capsuleCollider.bounds.center - new Vector3(0f, capsuleCollider.bounds.extents.y, 0f);
+            }
+        }
+
         private void Awake() {
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 0;
@@ -192,19 +198,30 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private void GroundCheck() {
             RaycastHit hitInfo;
 
-            if (Physics.SphereCast(transform.position, capsuleCollider.radius * 1f, Vector3.down, out hitInfo,
+            if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
                                    ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
-                Vector3 topOfCollider = hitInfo.collider.bounds.center + new Vector3(0f, hitInfo.collider.bounds.extents.y, 0f);
-                float heightDifference = topOfCollider.y - transform.TransformPoint(capsuleCollider.center - new Vector3(0f, capsuleCollider.height / 2, 0f)).y;
-                //Utils.LogValue("Height difference", heightDifference);
-                if(heightDifference < autoClimbMaxHeight && Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed) {
-                    canAutoClimb = true;
-                    toClimb = heightDifference;
-                } else {
-                    canAutoClimb = false;
+
+                Vector3 raycastDirection = rigidBody.velocity;
+                raycastDirection.y = 0;
+                Vector3 bottom = ColliderBottom;
+
+                RaycastHit hitinfoBottom;
+                if(Physics.Raycast(bottom, raycastDirection, out hitinfoBottom, capsuleCollider.radius, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
+                    RaycastHit hitinfoMaxClimb;
+                    Vector3 autoClimbTop = bottom + new Vector3(0f, autoClimbMaxHeight, 0f);
+                    if(!Physics.Raycast(autoClimbTop, raycastDirection, out hitinfoMaxClimb, capsuleCollider.radius, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
+                        if (Vector3.Angle(Vector3.up, hitinfoBottom.normal) > maxSlopeAllowed) {
+                            Vector3 topOfCollider = hitinfoBottom.collider.bounds.center + new Vector3(0f, hitinfoBottom.collider.bounds.extents.y, 0f);
+                            float heightDifference = topOfCollider.y - ColliderBottom.y;
+                            canAutoClimb = true;
+                            toClimb = heightDifference;
+                        } else {
+                            canAutoClimb = false;
+                        }
+                    }
                 }
-                //Utils.LogValue("Ground contact angle", Vector3.Angle(groundContactNormal, Vector3.up));
+
                 if (Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed || CanSlide()) {
                     grounded = false;
                     sliding = true;
@@ -218,7 +235,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 grounded = false;
                 sliding = false;
                 groundContactNormal = Vector3.up;
-                //LOLOLOLOL
             }
         }
 
