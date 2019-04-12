@@ -411,13 +411,13 @@ MonoBehaviour:
   lowestSpeedPossible: 0.0001
   jumpForce: 5
   gravityMultiplier: 1
-  bunnyHopWindow: 0.2
+  bunnyHopWindow: 0.1
   autoBunnyHop: 1
   groundCheckDistance: 0.01
   maxSlopeAllowed: 45
   requiredVelocityToSlide: 10
   requiredAngleToSlide: 5
-  autoClimbMaxHeight: 0.1
+  autoClimbMaxHeight: 0.5
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -77,7 +77,7 @@ namespace ExplosionJumping.PlayerControl {
             deathCamera.transform.eulerAngles = charController.cam.transform.eulerAngles;
         }
 
-        public void Ragdoll(bool shouldRagdoll) {
+        private void Ragdoll(bool shouldRagdoll) {
             charController.enabled = !shouldRagdoll; // disables player input and movement
             rigidBody.useGravity = shouldRagdoll;
             if (shouldRagdoll) {

@@ -1,6 +1,5 @@
 ﻿using System;
 using ExplosionJumping.PlayerControl.Movement.AirControl;
-using ExplosionJumping.Util;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl.Movement {
@@ -139,7 +138,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                         transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f), Space.World);
                     }
                     if (canAutoClimb) {
-                        Debug.Log("autoclimbing");
                         transform.Translate(new Vector3(0f, toClimb, 0f), Space.World);
                         canAutoClimb = false;
                     }
@@ -207,15 +205,20 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 Vector3 bottom = ColliderBottom;
 
                 RaycastHit hitinfoBottom;
+                Vector3 autoClimbTop = bottom + new Vector3(0f, autoClimbMaxHeight, 0f);
                 if(Physics.Raycast(bottom, raycastDirection, out hitinfoBottom, capsuleCollider.radius, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
                     RaycastHit hitinfoMaxClimb;
-                    Vector3 autoClimbTop = bottom + new Vector3(0f, autoClimbMaxHeight, 0f);
-                    if(!Physics.Raycast(autoClimbTop, raycastDirection, out hitinfoMaxClimb, capsuleCollider.radius, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
-                        if (Vector3.Angle(Vector3.up, hitinfoBottom.normal) > maxSlopeAllowed) {
+                    if(!Physics.Raycast(autoClimbTop, raycastDirection, out hitinfoMaxClimb, capsuleCollider.radius * 1.1f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
+                        if (Vector3.Angle(Vector3.up, hitinfoBottom.normal) > 89f) {
                             Vector3 topOfCollider = hitinfoBottom.collider.bounds.center + new Vector3(0f, hitinfoBottom.collider.bounds.extents.y, 0f);
                             float heightDifference = topOfCollider.y - ColliderBottom.y;
-                            canAutoClimb = true;
-                            toClimb = heightDifference;
+                            if (heightDifference <= autoClimbMaxHeight) {
+                                canAutoClimb = true;
+                                toClimb = heightDifference;
+                            } 
+                            else {
+                                canAutoClimb = false;
+                            }
                         } else {
                             canAutoClimb = false;
                         }
@@ -292,7 +295,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void SetHeight(float desiredHeight) {
-            if(desiredHeight == capsuleCollider.height) { return; }
+            if(Math.Abs(desiredHeight - capsuleCollider.height) < float.Epsilon) { return; }
             if(desiredHeight < capsuleCollider.radius * 2) {
                 desiredHeight = capsuleCollider.radius * 2;
             }

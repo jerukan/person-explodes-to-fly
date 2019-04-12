@@ -1153,16 +1153,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114437883547269092, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 2}
-      propertyPath: respawnPosition
-      value: 
-      objectReference: {fileID: 130482928}
-    - target: {fileID: 114391502314979226, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 2}
-      propertyPath: deathCamera
-      value: 
-      objectReference: {fileID: 194948946}
     - target: {fileID: 114796448674050630, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
         type: 2}
       propertyPath: healthSlider
@@ -1183,6 +1173,16 @@ Prefab:
       propertyPath: respawnTimerText
       value: 
       objectReference: {fileID: 903235742}
+    - target: {fileID: 114391502314979226, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 2}
+      propertyPath: deathCamera
+      value: 
+      objectReference: {fileID: 194948946}
+    - target: {fileID: 114437883547269092, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 2}
+      propertyPath: respawnPosition
+      value: 
+      objectReference: {fileID: 130482928}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 2}
   m_IsPrefabAsset: 0
