@@ -31,7 +31,7 @@ namespace ExplosionJumping.UI {
             healthSlider.value = playerController.CurrentHealth;
             healthNumber.text = ((int)healthSlider.value).ToString();
             if (playerController.Dead) {
-                respawnTimerText.text = playerRespawner.TimeUntilRespawn().ToString();
+                respawnTimerText.text = ((int)playerRespawner.TimeUntilRespawn()).ToString();
             }
             respawnPanel.SetActive(playerController.Dead);
         }

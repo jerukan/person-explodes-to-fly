@@ -41,8 +41,8 @@ namespace ExplosionJumping.PlayerControl {
             prevState = playerController.Dead;
         }
 
-        public int TimeUntilRespawn() {
-            return (int)(timeOfDeath + respawnTime - Time.time);
+        public float TimeUntilRespawn() {
+            return timeOfDeath + respawnTime - Time.time;
         }
     }
 }

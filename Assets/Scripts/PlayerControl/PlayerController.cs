@@ -3,7 +3,6 @@ using ExplosionJumping.Util;
 using ExplosionJumping.Weapon;
 using ExplosionJumping.Weapon.Projectile;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ExplosionJumping.PlayerControl {
     [RequireComponent(typeof(RigidbodyFPControllerCustom))]
@@ -54,6 +53,10 @@ namespace ExplosionJumping.PlayerControl {
             }
         }
 
+        /// <summary>
+        /// The method to modify health while the player is in-game and alive.
+        /// This should be used over setting the current health directly.
+        /// </summary>
         public void AddHealth(float amount) {
             currentHealth += amount;
             if(currentHealth > maxHealth) {

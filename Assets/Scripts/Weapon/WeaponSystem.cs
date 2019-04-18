@@ -4,6 +4,7 @@ using ExplosionJumping.PlayerControl;
 using ExplosionJumping.Util;
 
 namespace ExplosionJumping.Weapon {
+    [RequireComponent(typeof(PlayerController))]
     public class WeaponSystem : MonoBehaviour {
 
         public WeaponController[] weaponPrefabs;
