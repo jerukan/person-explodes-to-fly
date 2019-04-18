@@ -1,5 +1,6 @@
 ﻿using System;
 using ExplosionJumping.PlayerControl.Movement.AirControl;
+using ExplosionJumping.Util;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl.Movement {
@@ -49,21 +50,21 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public float maxSlopeAllowed = 45f;
         public float requiredVelocityToSlide = 10f;
         public float requiredAngleToSlide = 5f; // in degrees
-        public float autoClimbMaxHeight = 0.05f; // TODO fixfixfix
+        public float autoClimbMaxHeight = 0.05f;
 
         private Rigidbody rigidBody;
         private CapsuleCollider capsuleCollider;
         private PlayerAirController airStrafeController;
         private Vector3 groundContactNormal;
-        private bool jump, grounded, crouching, sliding;
-        private bool canAutoClimb;
-        private float toClimb;
+        private bool jump, grounded, bottomGrounded, crouching, sliding;
         private float height, radius;
 
         private float currentTargetSpeed = 8f;
         private int ticksOnGround; // time the player has spend on the ground in the duration of being grounded.
         private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
         private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
+
+        private int contactLayerMask;
 
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
@@ -76,6 +77,9 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public Vector3 ColliderBottom {
             get {
                 return capsuleCollider.bounds.center - new Vector3(0f, capsuleCollider.bounds.extents.y, 0f);
+            }
+            set {
+                transform.position = value + new Vector3(0f, capsuleCollider.height / 2f, 0f);
             }
         }
 
@@ -91,6 +95,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             height = capsuleCollider.height;
             radius = capsuleCollider.radius;
             airStrafeController = GetComponent<PlayerAirController>();
+            contactLayerMask = LayerMask.GetMask("Default");
         }
 
         private void Start() {
@@ -116,10 +121,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
             bool wasCrouched = crouching;
             Vector2 input = GetInput();
             if(crouching) {
-                SetHeight(height * 0.5f);
+                SetColliderHeight(height * 0.5f);
             }
             else {
-                SetHeight(height);
+                SetColliderHeight(height);
             }
             if (grounded) {
                 if((totalTicksInAir - ticksWhenJumpedInAir) * Time.fixedDeltaTime < bunnyHopWindow / 2) {
@@ -136,10 +141,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                     ZeroLowVelocity();
                     if(crouching && !wasCrouched) {
                         transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f), Space.World);
-                    }
-                    if (canAutoClimb) {
-                        transform.Translate(new Vector3(0f, toClimb, 0f), Space.World);
-                        canAutoClimb = false;
                     }
                 }
             }
@@ -197,35 +198,12 @@ namespace ExplosionJumping.PlayerControl.Movement {
             RaycastHit hitInfo;
 
             if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
-                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
+                                   ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
 
-                Vector3 raycastDirection = rigidBody.velocity;
-                raycastDirection.y = 0;
-                Vector3 bottom = ColliderBottom;
+                bottomGrounded = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.height / 2f + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore);
 
-                RaycastHit hitinfoBottom;
-                Vector3 autoClimbTop = bottom + new Vector3(0f, autoClimbMaxHeight, 0f);
-                if(Physics.Raycast(bottom, raycastDirection, out hitinfoBottom, capsuleCollider.radius, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
-                    RaycastHit hitinfoMaxClimb;
-                    if(!Physics.Raycast(autoClimbTop, raycastDirection, out hitinfoMaxClimb, capsuleCollider.radius * 1.1f, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
-                        if (Vector3.Angle(Vector3.up, hitinfoBottom.normal) > 89f) {
-                            Vector3 topOfCollider = hitinfoBottom.collider.bounds.center + new Vector3(0f, hitinfoBottom.collider.bounds.extents.y, 0f);
-                            float heightDifference = topOfCollider.y - ColliderBottom.y;
-                            if (heightDifference <= autoClimbMaxHeight) {
-                                canAutoClimb = true;
-                                toClimb = heightDifference;
-                            } 
-                            else {
-                                canAutoClimb = false;
-                            }
-                        } else {
-                            canAutoClimb = false;
-                        }
-                    }
-                }
-
-                if (Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed || CanSlide()) {
+                if ((Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed || CanSlide()) && !bottomGrounded) {
                     grounded = false;
                     sliding = true;
                 }
@@ -294,12 +272,39 @@ namespace ExplosionJumping.PlayerControl.Movement {
             return !grounded && rigidBody.velocity.sqrMagnitude > requiredVelocityToSlide * requiredVelocityToSlide && Vector3.Angle(groundContactNormal, Vector3.up) > requiredAngleToSlide;
         }
 
-        private void SetHeight(float desiredHeight) {
+        private void SetColliderHeight(float desiredHeight) {
             if(Math.Abs(desiredHeight - capsuleCollider.height) < float.Epsilon) { return; }
             if(desiredHeight < capsuleCollider.radius * 2) {
                 desiredHeight = capsuleCollider.radius * 2;
             }
             capsuleCollider.height = desiredHeight;
+        }
+
+        private void OnCollisionEnter(Collision collision) {
+            ContactPoint highestContact = collision.contacts[0];
+            // find highest point of contact to climb to
+            foreach(ContactPoint cp in collision.contacts) {
+                if(cp.point.y > highestContact.point.y) {
+                    highestContact = cp;
+                }
+            }
+            float heightDifference = highestContact.point.y - ColliderBottom.y;
+            RaycastHit bottomHit;
+            Vector3 contactDirection = highestContact.point - ColliderBottom;
+            contactDirection.y = 0;
+            // if the point to autoclimb to is part of a walkable slope, do nothing
+            if(Physics.Raycast(ColliderBottom, contactDirection, out bottomHit, capsuleCollider.radius, contactLayerMask, QueryTriggerInteraction.Ignore)) {
+                if(Vector3.Angle(Vector3.up, bottomHit.normal) < maxSlopeAllowed) {
+                    return;
+                } 
+            }
+            RaycastHit highestContactHit; // check slope of the point to climb to
+            Physics.Raycast(highestContact.point + new Vector3(0f, 0.1f, 0f), Vector3.down, out highestContactHit, 0.2f, contactLayerMask, QueryTriggerInteraction.Ignore);
+            // perform autoclimb if highest point is valid
+            if (heightDifference <= autoClimbMaxHeight && heightDifference > 0f && grounded && Vector3.Angle(Vector3.up, highestContactHit.normal) < maxSlopeAllowed) {
+                ColliderBottom = highestContact.point;
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+            }
         }
     }
 }

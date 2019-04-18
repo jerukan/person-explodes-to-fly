@@ -53,6 +53,10 @@ namespace ExplosionJumping.Util {
         public static void LogValue(String label, bool value) {
             Debug.Log($"{label}: {value}");
         }
+
+        public static void LogValue(String label, System.Object value) {
+            Debug.Log($"{label}: {value}");
+        }
     }
 
     public static class InputUtils {
