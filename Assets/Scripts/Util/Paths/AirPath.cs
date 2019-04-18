@@ -1,12 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExplosionJumping.Util {
-    public struct AirPath {
+namespace ExplosionJumping.Util.Paths {
+    /// <summary>
+    /// Represents a path affected by gravity.
+    /// Currently only handles gravity with ONLY a y-component.
+    /// TODO make it work with actual Vector3 gravity.
+    /// </summary>
+    public struct AirPath: IPath {
 
-        private readonly Vector3 originalPosition;
-        private readonly Vector3 velocity;
-        private readonly Vector3 gravity;
+        public readonly Vector3 originalPosition;
+        public readonly Vector3 velocity;
+        public readonly Vector3 gravity;
 
         public AirPath(Vector3 originalPosition, Vector3 velocity, Vector3 gravity) {
             this.originalPosition = originalPosition;
@@ -34,7 +39,7 @@ namespace ExplosionJumping.Util {
                 return 0f;
             }
             // quadratic equation, solve for t, 1/2at^2 + v0t + s
-            return (-velocity.y - Mathf.Sqrt(discriminant)) / (2 * 0.5f * gravity.y);
+            return (-velocity.y - Mathf.Sqrt(discriminant)) / gravity.y;
         }
 
         public float TimeUntilPeak() {

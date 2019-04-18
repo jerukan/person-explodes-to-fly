@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using ExplosionJumping.Util;
+using ExplosionJumping.Util.Paths;
 
 namespace ExplosionJumping.PlayerControl.Movement {
 
