@@ -405,7 +405,7 @@ MonoBehaviour:
   backwardSpeed: 3.5
   strafeSpeed: 4
   groundAccelerationRate: 0.2
-  crouchMultiplier: 2
+  crouchMultiplier: 0.5
   crouchKey: 306
   maxHorizontalSpeed: 400
   lowestSpeedPossible: 0.0001
@@ -417,7 +417,7 @@ MonoBehaviour:
   maxSlopeAllowed: 45
   requiredVelocityToSlide: 10
   requiredAngleToSlide: 5
-  autoClimbMaxHeight: 0.5
+  autoClimbMaxHeight: 0.3
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1
