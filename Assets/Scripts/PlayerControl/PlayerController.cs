@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 namespace ExplosionJumping.PlayerControl {
     [RequireComponent(typeof(RigidbodyFPControllerCustom))]
-    [RequireComponent(typeof(PlayerUIManager))]
     public class PlayerController : MonoBehaviour {
 
         public int maxHealth;
@@ -70,6 +69,9 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         public void SetAlive(bool alive) {
+            if(alive && dead) {
+                currentHealth = maxHealth;
+            }
             Ragdoll(!alive);
             dead = !alive;
             deathCamera.enabled = !alive;
