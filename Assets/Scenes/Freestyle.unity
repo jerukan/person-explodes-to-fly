@@ -113,12 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &17991744 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114124065670543172, guid: 9d31542500d584223a95a14d661277dd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1456538927}
-  m_Script: {fileID: 11500000, guid: e65ac151a3b3747df85925c71c04fcae, type: 3}
 --- !u!1 &23576750
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +453,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 40, y: 90, z: 0}
+--- !u!114 &129113639 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114391502314979226, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 928441926}
+  m_Script: {fileID: 11500000, guid: e26bb5c050dc34b8ea2a27112274fca3, type: 3}
 --- !u!1 &194597137
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,7 +978,7 @@ Prefab:
         type: 2}
       propertyPath: respawnDisplay
       value: 
-      objectReference: {fileID: 2018090860}
+      objectReference: {fileID: 0}
     - target: {fileID: 114796448674050630, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
         type: 2}
       propertyPath: respawnTimerText
@@ -1940,20 +1940,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114334171525947438, guid: 9d31542500d584223a95a14d661277dd,
+    - target: {fileID: 114909256537791552, guid: 9d31542500d584223a95a14d661277dd,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: playerController
       value: 
-      objectReference: {fileID: 17991744}
-    - target: {fileID: 1701608181382642, guid: 9d31542500d584223a95a14d661277dd, type: 2}
-      propertyPath: m_Name
-      value: IngameUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 114334171525947438, guid: 9d31542500d584223a95a14d661277dd,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetPause
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 129113639}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d31542500d584223a95a14d661277dd, type: 2}
   m_IsPrefabAsset: 0
@@ -2646,11 +2637,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2018090860 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1167407759290434, guid: 9d31542500d584223a95a14d661277dd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1456538927}
 --- !u!1 &2058910123
 GameObject:
   m_ObjectHideFlags: 0
