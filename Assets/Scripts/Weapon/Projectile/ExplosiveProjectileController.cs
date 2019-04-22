@@ -7,7 +7,6 @@ using ExplosionJumping.Weapon.Projectile.Explosion;
 
 namespace ExplosionJumping.Weapon.Projectile {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(ExplosionTrigger))]
     [RequireComponent(typeof(ExplosionController))]
     public class ExplosiveProjectileController : MonoBehaviour {

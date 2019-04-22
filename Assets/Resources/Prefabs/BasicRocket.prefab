@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114021677663658784}
   - component: {fileID: 114963026102828806}
   - component: {fileID: 114774580038606504}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: BasicRocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 33417420817829256}
   - component: {fileID: 23943953251555152}
   - component: {fileID: 136515002995986538}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4718637645875118}
   - component: {fileID: 198170789487068600}
   - component: {fileID: 199852616251883930}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 4753553081293504}
   - component: {fileID: 198568798958693728}
   - component: {fileID: 199632105639423388}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.18872178, y: 0.18880439, z: 0.37900752}
-  m_Center: {x: -0.00008350611, y: -0.0027589798, z: 0.0008978024}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114021677663658784
 MonoBehaviour:
   m_ObjectHideFlags: 1

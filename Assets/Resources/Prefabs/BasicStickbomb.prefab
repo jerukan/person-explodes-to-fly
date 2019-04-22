@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33613997004790996}
   - component: {fileID: 23827685785164768}
   - component: {fileID: 135384466160431136}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114855229116684338}
   - component: {fileID: 114147023759892680}
   - component: {fileID: 114874192961721212}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: BasicStickbomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4067695690540716}
   - component: {fileID: 96491643149166052}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4730695947336210}
   - component: {fileID: 198521369289007932}
   - component: {fileID: 199539333031894936}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

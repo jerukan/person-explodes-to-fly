@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4538043496341742}
   - component: {fileID: 95827533487533162}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: TheActualModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4169830261481182}
   - component: {fileID: 114450041212092134}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: GrenadeLauncher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 33869414911605900}
   - component: {fileID: 23547084062187044}
   - component: {fileID: 65886159792501068}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 33533845547408836}
   - component: {fileID: 23466416107302210}
   - component: {fileID: 136744168365707652}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,8 +265,6 @@ MonoBehaviour:
   fireRateSecondary: 0
   fullAuto: 1
   weaponOffset: {x: 0.4, y: -0.3, z: 0.5}
-  primaryFireKey: 323
-  secondaryFireKey: 324
   owner: {fileID: 0}
 --- !u!136 &136744168365707652
 CapsuleCollider:

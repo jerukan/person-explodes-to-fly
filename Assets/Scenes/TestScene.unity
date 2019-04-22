@@ -1216,7 +1216,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1570820859
+--- !u!1001 &1471042442
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1267,7 +1267,7 @@ Prefab:
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114391502314979226, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
     type: 2}
-  m_PrefabInternal: {fileID: 1570820859}
+  m_PrefabInternal: {fileID: 1471042442}
   m_Script: {fileID: 11500000, guid: e26bb5c050dc34b8ea2a27112274fca3, type: 3}
 --- !u!1 &1670310988
 GameObject:
