@@ -5,7 +5,7 @@ using ExplosionJumping.Weapon.Projectile;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl {
-    [RequireComponent(typeof(RigidbodyFPControllerCustom))]
+    [RequireComponent(typeof(RigidbodyFPController))]
     public class PlayerController : MonoBehaviour {
 
         public int maxHealth;
@@ -13,7 +13,7 @@ namespace ExplosionJumping.PlayerControl {
         public int healthRegen;
         public Camera deathCamera;
 
-        private RigidbodyFPControllerCustom charController;
+        private RigidbodyFPController charController;
         private WeaponSystem weaponSystem;
         private Rigidbody rigidBody;
         private float currentHealth;
@@ -32,7 +32,7 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         private void Awake() {
-            charController = GetComponent<RigidbodyFPControllerCustom>();
+            charController = GetComponent<RigidbodyFPController>();
             weaponSystem = GetComponent<WeaponSystem>();
             rigidBody = GetComponent<Rigidbody>();
             currentHealth = maxHealth;

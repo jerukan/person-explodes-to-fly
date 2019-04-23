@@ -10,7 +10,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     [RequireComponent(typeof(PlayerAirController))]
-    public class RigidbodyFPControllerCustom : MonoBehaviour {
+    public class RigidbodyFPController : MonoBehaviour {
 
         public Camera cam;
         public CameraLook cameraLook = new CameraLook();

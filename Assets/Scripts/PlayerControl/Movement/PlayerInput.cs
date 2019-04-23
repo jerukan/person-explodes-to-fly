@@ -2,13 +2,13 @@
 using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.Movement {
-    [RequireComponent(typeof(RigidbodyFPControllerCustom))]
+    [RequireComponent(typeof(RigidbodyFPController))]
     public class PlayerInput : MonoBehaviour {
 
         public KeyCode crouchKey = KeyCode.LeftControl;
         public MouseLook mouseLook;
 
-        private RigidbodyFPControllerCustom charController;
+        private RigidbodyFPController charController;
         private Rigidbody rigidBody;
 
         private Vector2 currentInput;
@@ -18,7 +18,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void Awake() {
-            charController = GetComponent<RigidbodyFPControllerCustom>();
+            charController = GetComponent<RigidbodyFPController>();
             rigidBody = GetComponent<Rigidbody>();
             mouseLook = new MouseLook(charController.cameraLook);
         }

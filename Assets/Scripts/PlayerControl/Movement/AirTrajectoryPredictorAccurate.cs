@@ -21,7 +21,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private bool hasRigidBody;
         private AirPath currentPath;
         private GameObject landingIndicator;
-        private RigidbodyFPControllerCustom controller;
+        private RigidbodyFPController controller;
 
         public Vector3 PredictedLandingSpot {
             get { return predictedLandingSpot; }
@@ -31,7 +31,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             capsuleCollider = GetComponent<CapsuleCollider>();
             rigidBody = GetComponent<Rigidbody>();
             hasRigidBody = rigidBody != null;
-            controller = GetComponent<RigidbodyFPControllerCustom>();
+            controller = GetComponent<RigidbodyFPController>();
             gravityMultiplier = controller.gravityMultiplier;
         }
 
