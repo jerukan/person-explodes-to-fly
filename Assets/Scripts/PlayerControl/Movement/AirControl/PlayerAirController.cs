@@ -6,7 +6,7 @@ namespace ExplosionJumping.PlayerControl.Movement.AirControl {
     /// <summary>
     /// Controls how the player moves in the air.
     /// </summary>
-    [RequireComponent(typeof(RigidbodyFPControllerCustom))]
+    [RequireComponent(typeof(RigidbodyFPController))]
     public abstract class PlayerAirController : MonoBehaviour {
 
         // cached variables for easy access
@@ -19,7 +19,7 @@ namespace ExplosionJumping.PlayerControl.Movement.AirControl {
 
         // Use this for initialization
         private void Start() {
-            cam = GetComponent<RigidbodyFPControllerCustom>().cam;
+            cam = GetComponent<RigidbodyFPController>().cam;
         }
 
         /// <summary>

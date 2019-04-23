@@ -5,7 +5,7 @@ using ExplosionJumping.Weapon.Projectile;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl {
-    [RequireComponent(typeof(RigidbodyFPControllerCustom))]
+    [RequireComponent(typeof(RigidbodyFPController))]
     public class PlayerController : MonoBehaviour {
 
         public int maxHealth;
@@ -13,7 +13,7 @@ namespace ExplosionJumping.PlayerControl {
         public int healthRegen;
         public Camera deathCamera;
 
-        private RigidbodyFPControllerCustom charController;
+        private RigidbodyFPController charController;
         private WeaponSystem weaponSystem;
         private Rigidbody rigidBody;
         private float currentHealth;
@@ -32,7 +32,7 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         private void Awake() {
-            charController = GetComponent<RigidbodyFPControllerCustom>();
+            charController = GetComponent<RigidbodyFPController>();
             weaponSystem = GetComponent<WeaponSystem>();
             rigidBody = GetComponent<Rigidbody>();
             currentHealth = maxHealth;
@@ -80,10 +80,14 @@ namespace ExplosionJumping.PlayerControl {
             deathCamera.enabled = !alive;
             charController.cam.enabled = alive;
             deathCamera.transform.eulerAngles = charController.cam.transform.eulerAngles;
+            charController.ResetCameraRotation();
         }
 
         private void Ragdoll(bool shouldRagdoll) {
             charController.enabled = !shouldRagdoll; // disables player input and movement
+            if(GetComponent<PlayerInput>() != null) {
+                GetComponent<PlayerInput>().enabled = !shouldRagdoll;
+            }
             rigidBody.useGravity = shouldRagdoll;
             if (shouldRagdoll) {
                 rigidBody.constraints = RigidbodyConstraints.None;
