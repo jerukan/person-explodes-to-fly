@@ -6,7 +6,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     public class PlayerInput : MonoBehaviour {
 
         public KeyCode crouchKey = KeyCode.LeftControl;
-        public MouseLook mouseLook = new MouseLook();
+        public MouseLook mouseLook;
 
         private RigidbodyFPControllerCustom charController;
         private Rigidbody rigidBody;
@@ -20,6 +20,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private void Awake() {
             charController = GetComponent<RigidbodyFPControllerCustom>();
             rigidBody = GetComponent<Rigidbody>();
+            mouseLook = new MouseLook(charController.cameraLook);
         }
 
         private void Start() {

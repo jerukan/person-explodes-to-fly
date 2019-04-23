@@ -407,6 +407,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 20391502722244772}
+  cameraLook:
+    clampVerticalRotation: 1
+    MinimumX: -89
+    MaximumX: 89
+    smooth: 0
+    smoothTime: 5
   forwardSpeed: 4
   backwardSpeed: 3.5
   strafeSpeed: 4
@@ -425,6 +431,7 @@ MonoBehaviour:
   autoClimbMaxHeight: 0.3
   currentTargetSpeed: 0
   currentTargetDirection: {x: 0, y: 0}
+  currentTargetLookAngle: {x: 0, y: 0}
 --- !u!114 &114391502314979226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -452,13 +459,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crouchKey: 306
   mouseLook:
+    cameraLook:
+      clampVerticalRotation: 1
+      MinimumX: -89
+      MaximumX: 89
+      smooth: 0
+      smoothTime: 5
     XSensitivity: 1.5
     YSensitivity: 1.5
-    clampVerticalRotation: 1
-    MinimumX: -90
-    MaximumX: 90
-    smooth: 0
-    smoothTime: 5
     lockCursor: 1
 --- !u!114 &114437883547269092
 MonoBehaviour:

@@ -13,7 +13,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     public class RigidbodyFPControllerCustom : MonoBehaviour {
 
         public Camera cam;
-        //private MouseLook mouseLook = new MouseLook();
+        public CameraLook cameraLook = new CameraLook();
 
         [Header("Basic movement")]
 
@@ -59,8 +59,9 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private bool bottomGrounded;
         private float height, radius;
 
-        [HideInInspector]public float currentTargetSpeed;
-        [HideInInspector]public Vector2 currentTargetDirection; // local direction
+        [HideInInspector] public float currentTargetSpeed;
+        [HideInInspector] public Vector2 currentTargetDirection; // local direction
+        [HideInInspector] public Vector2 currentTargetLookAngle; // desired local direction for the camera to look at (x and y rot)
         private int ticksOnGround; // time the player has spend on the ground in the duration of being grounded.
         private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
         private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
@@ -141,21 +142,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void Start() {
-            //mouseLook.Init(transform, cam.transform);
+            cameraLook.Init(transform, cam.transform);
         }
 
         private void Update() {
-            //RotateView();
-
-            //if (autoBunnyHop) {
-            //    jump = Input.GetButton("Jump");
-            //}
-            //else if (Input.GetButtonDown("Jump")) {
-            //    jump = true;
-            //    if (!Grounded) {
-            //        ticksWhenJumpedInAir = totalTicksInAir;
-            //    }
-            //}
         }
 
         private void FixedUpdate() {
@@ -280,6 +270,11 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 desiredHeight = capsuleCollider.radius * 2;
             }
             capsuleCollider.height = desiredHeight;
+        }
+
+        public void ResetCameraRotation() {
+            cam.transform.localEulerAngles = Vector3.zero;
+            cameraLook.Init(transform, cam.transform);
         }
 
         private void OnCollisionEnter(Collision collision) {

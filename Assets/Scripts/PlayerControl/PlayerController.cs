@@ -80,6 +80,7 @@ namespace ExplosionJumping.PlayerControl {
             deathCamera.enabled = !alive;
             charController.cam.enabled = alive;
             deathCamera.transform.eulerAngles = charController.cam.transform.eulerAngles;
+            charController.ResetCameraRotation();
         }
 
         private void Ragdoll(bool shouldRagdoll) {
