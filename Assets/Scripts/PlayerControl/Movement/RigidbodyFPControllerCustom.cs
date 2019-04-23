@@ -13,7 +13,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     public class RigidbodyFPControllerCustom : MonoBehaviour {
 
         public Camera cam;
-        public MouseLook mouseLook = new MouseLook();
+        //private MouseLook mouseLook = new MouseLook();
 
         [Header("Basic movement")]
 
@@ -25,7 +25,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public float groundAccelerationRate = 0.2f;
         [Tooltip("How much the player speed will be multiplied by when crouching.")]
         public float crouchMultiplier = 0.5f;
-        public KeyCode crouchKey = KeyCode.LeftControl;
         [Tooltip("The max possible horizontal speed the player can move at, even in the air.")]
         public float maxHorizontalSpeed = 400f;
         [Tooltip("The maximum speed the player can be at before being considered at a standstill.")]
@@ -56,10 +55,12 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private CapsuleCollider capsuleCollider;
         private PlayerAirController airStrafeController;
         private Vector3 groundContactNormal;
-        private bool jump, grounded, bottomGrounded, crouching, sliding;
+        private bool jump;
+        private bool bottomGrounded;
         private float height, radius;
 
-        private float currentTargetSpeed = 8f;
+        [HideInInspector]public float currentTargetSpeed;
+        [HideInInspector]public Vector2 currentTargetDirection; // local direction
         private int ticksOnGround; // time the player has spend on the ground in the duration of being grounded.
         private int totalTicksInAir; // total time player has spend in the air (persistent between jumps).
         private int ticksWhenJumpedInAir; // when the player pressed the jump button while still in the air.
@@ -70,16 +71,57 @@ namespace ExplosionJumping.PlayerControl.Movement {
             get { return rigidBody.velocity; }
         }
 
-        public bool Grounded {
-            get { return grounded; }
-        }
-
         public Vector3 ColliderBottom {
             get {
                 return capsuleCollider.bounds.center - new Vector3(0f, capsuleCollider.bounds.extents.y, 0f);
             }
             set {
                 transform.position = value + new Vector3(0f, capsuleCollider.height / 2f, 0f);
+            }
+        }
+
+        public bool Jumping {
+            get;
+            private set;
+        }
+
+        public bool Crouching {
+            get;
+            private set;
+        }
+
+        public bool Sliding {
+            get;
+            private set;
+        }
+
+        public bool Grounded {
+            get;
+            private set;
+        }
+
+        public bool Jump {
+            set {
+                jump = value;
+                if (!autoBunnyHop && !Grounded && jump) {
+                    ticksWhenJumpedInAir = totalTicksInAir;
+                }
+            }
+        }
+
+        public bool Crouch {
+            set {
+                bool prevState = Crouching;
+                Crouching = value;
+                if (Crouching) {
+                    SetColliderHeight(height * 0.5f);
+                }
+                else {
+                    SetColliderHeight(height);
+                }
+                if (Crouching && !prevState && Grounded) {
+                    transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f), Space.World);
+                }
             }
         }
 
@@ -99,34 +141,28 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void Start() {
-            mouseLook.Init(transform, cam.transform);
+            //mouseLook.Init(transform, cam.transform);
         }
 
         private void Update() {
-            RotateView();
+            //RotateView();
 
-            if (autoBunnyHop) {
-                jump = Input.GetButton("Jump");
-            }
-            else if (Input.GetButtonDown("Jump")) {
-                jump = true;
-                if (!grounded) {
-                    ticksWhenJumpedInAir = totalTicksInAir;
-                }
-            }
+            //if (autoBunnyHop) {
+            //    jump = Input.GetButton("Jump");
+            //}
+            //else if (Input.GetButtonDown("Jump")) {
+            //    jump = true;
+            //    if (!Grounded) {
+            //        ticksWhenJumpedInAir = totalTicksInAir;
+            //    }
+            //}
         }
 
         private void FixedUpdate() {
             GroundCheck();
-            bool wasCrouched = crouching;
-            Vector2 input = GetInput();
-            if(crouching) {
-                SetColliderHeight(height * 0.5f);
-            }
-            else {
-                SetColliderHeight(height);
-            }
-            if (grounded) {
+            UpdateDesiredTargetSpeed();
+
+            if (Grounded) {
                 if((totalTicksInAir - ticksWhenJumpedInAir) * Time.fixedDeltaTime < bunnyHopWindow / 2) {
                     jump = true;
                 }
@@ -137,57 +173,28 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 }
                 else if(ticksOnGround * Time.fixedDeltaTime > bunnyHopWindow / 2f) { // when completely grounded, ignore gravity and stick to ground
                     // also prevents normal ground movement until the bunnyhop window goes past.
-                    AccelerateToSpeed(input);
+                    AccelerateToSpeed();
                     ZeroLowVelocity();
-                    if(crouching && !wasCrouched) {
-                        transform.Translate(new Vector3(0f, -(height - capsuleCollider.height) / 2, 0f), Space.World);
-                    }
                 }
             }
             else {
                 ticksOnGround = 0;
                 totalTicksInAir++;
                 rigidBody.AddForce(new Vector3(0f, Physics.gravity.y * gravityMultiplier, 0f), ForceMode.Acceleration);
-                airStrafeController.AirStafe(input);
+                airStrafeController.AirStafe(currentTargetDirection);
             }
             CapHorizontalVelocity();
             jump = false;
         }
 
-        private void AccelerateToSpeed(Vector2 input) {
-            Vector3 target = transform.TransformDirection(new Vector3(input.x, 0, input.y)).normalized;
+        private void AccelerateToSpeed() {
+            Vector3 target = transform.TransformDirection(new Vector3(currentTargetDirection.x, 0, currentTargetDirection.y)).normalized;
             target = target * currentTargetSpeed;
             Vector3 delta = target - rigidBody.velocity;
             delta.y = 0;
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(delta, groundContactNormal).normalized * delta.magnitude;
             projectedVelocity = projectedVelocity * groundAccelerationRate;
             rigidBody.AddForce(projectedVelocity, ForceMode.VelocityChange);
-        }
-
-        private Vector2 GetInput() {
-            // raw axis makes keyboard actually work properly
-            Vector2 input = new Vector2 {
-                x = Input.GetAxisRaw("Horizontal"),
-                y = Input.GetAxisRaw("Vertical")
-            };
-            UpdateDesiredTargetSpeed(input);
-            return input;
-        }
-
-        private void RotateView() {
-            // avoids the mouse looking if the game is effectively paused
-            if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
-
-            // get the rotation before it's changed
-            float oldYRotation = transform.eulerAngles.y;
-
-            mouseLook.LookRotation(transform, cam.transform, true);
-
-            if (grounded) {
-                // Rotate the rigidbody velocity to match the new direction that the character is looking
-                Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
-                rigidBody.velocity = velRotation * rigidBody.velocity;
-            }
         }
 
         /// <summary>
@@ -201,48 +208,43 @@ namespace ExplosionJumping.PlayerControl.Movement {
                                    ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
 
-                bottomGrounded = Physics.Raycast(transform.position, Vector3.down, capsuleCollider.height / 2f + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore);
-
+                RaycastHit bottomHitInfo;
+                bottomGrounded = Physics.Raycast(transform.position, Vector3.down, out bottomHitInfo, capsuleCollider.height / 2f + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore);
+                // TODO sliding machine broke fix pls
                 if ((Vector3.Angle(groundContactNormal, Vector3.up) > maxSlopeAllowed || CanSlide()) && !bottomGrounded) {
-                    grounded = false;
-                    sliding = true;
+                    Grounded = false;
+                    Sliding = true;
                 }
                 else {
-                    grounded = true;
-                    sliding = false;
+                    Grounded = true;
+                    Sliding = false;
                 }
             }
             else {
-                grounded = false;
-                sliding = false;
+                Grounded = false;
+                Sliding = false;
                 groundContactNormal = Vector3.up;
             }
         }
 
-        private void UpdateDesiredTargetSpeed(Vector2 input) {
-            if (Input.GetKey(crouchKey)) {
-                crouching = true;
-            }
-            else {
-                crouching = false;
-            }
-            if (input == Vector2.zero) {
+        private void UpdateDesiredTargetSpeed() {
+            if (currentTargetDirection == Vector2.zero) {
                 return;
             }
-            if (input.x > 0 || input.x < 0) {
+            if (currentTargetDirection.x > 0 || currentTargetDirection.x < 0) {
                 //strafe
                 currentTargetSpeed = strafeSpeed;
             }
-            if (input.y < 0) {
+            if (currentTargetDirection.y < 0) {
                 //backwards
                 currentTargetSpeed = backwardSpeed;
             }
-            if (input.y > 0) {
+            if (currentTargetDirection.y > 0) {
                 //forwards
                 //handled last as if strafing and moving forward at the same time forwards speed should take precedence
                 currentTargetSpeed = forwardSpeed;
             }
-            if (crouching) {
+            if (Crouching) {
                 currentTargetSpeed *= crouchMultiplier;
             }
         }
@@ -269,7 +271,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private bool CanSlide() {
-            return !grounded && rigidBody.velocity.sqrMagnitude > requiredVelocityToSlide * requiredVelocityToSlide && Vector3.Angle(groundContactNormal, Vector3.up) > requiredAngleToSlide;
+            return !Grounded && rigidBody.velocity.sqrMagnitude > requiredVelocityToSlide * requiredVelocityToSlide && Vector3.Angle(groundContactNormal, Vector3.up) > requiredAngleToSlide;
         }
 
         private void SetColliderHeight(float desiredHeight) {
@@ -301,7 +303,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             RaycastHit highestContactHit; // check slope of the point to climb to
             Physics.Raycast(highestContact.point + new Vector3(0f, 0.1f, 0f), Vector3.down, out highestContactHit, 0.2f, contactLayerMask, QueryTriggerInteraction.Ignore);
             // perform autoclimb if highest point is valid
-            if (heightDifference <= autoClimbMaxHeight && heightDifference > 0f && grounded && Vector3.Angle(Vector3.up, highestContactHit.normal) < maxSlopeAllowed) {
+            if (heightDifference <= autoClimbMaxHeight && heightDifference > 0f && Grounded && Vector3.Angle(Vector3.up, highestContactHit.normal) < maxSlopeAllowed) {
                 ColliderBottom = highestContact.point;
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
             }

@@ -84,6 +84,9 @@ namespace ExplosionJumping.PlayerControl {
 
         private void Ragdoll(bool shouldRagdoll) {
             charController.enabled = !shouldRagdoll; // disables player input and movement
+            if(GetComponent<PlayerInput>() != null) {
+                GetComponent<PlayerInput>().enabled = !shouldRagdoll;
+            }
             rigidBody.useGravity = shouldRagdoll;
             if (shouldRagdoll) {
                 rigidBody.constraints = RigidbodyConstraints.None;
