@@ -5,6 +5,14 @@ namespace ExplosionJumping.Util {
     
     public static class Utils {
 
+        public static int AddLayerToMask(int layerMask, int layerToAdd) {
+            return layerMask |= 1 << layerToAdd;
+        }
+
+        public static int RemoveLayerToMask(int layerMask, int layerToAdd) {
+            return layerMask &= ~(1 << layerToAdd);
+        }
+
         public static Vector2 RotateVector(Vector2 vector, float degrees) {
             double vectorRad = GetVectorRotation(vector);
             double resultRad = vectorRad + degrees * Math.PI / 180;

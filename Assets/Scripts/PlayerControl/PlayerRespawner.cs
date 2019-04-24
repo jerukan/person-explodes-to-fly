@@ -12,17 +12,17 @@ namespace ExplosionJumping.PlayerControl {
         private float timeOfDeath;
         private bool prevState;
         private PlayerController playerController;
-        private Camera playerCamera;
+        private RigidbodyFPController charController;
         private MouseLook coolMouseLook;
 
         void Awake() {
             playerController = GetComponent<PlayerController>();
-            playerCamera = GetComponent<RigidbodyFPController>().cam;
+            charController = GetComponent<RigidbodyFPController>();
         }
 
         private void Start() {
-            coolMouseLook = new MouseLook(GetComponent<RigidbodyFPController>().head.cameraLook);
-            coolMouseLook.Init(transform, GetComponent<RigidbodyFPController>().head.transform);
+            coolMouseLook = new MouseLook(charController.head.cameraLook);
+            coolMouseLook.Init(transform, charController.head.transform);
         }
 
         // Update is called once per frame

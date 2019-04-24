@@ -73,7 +73,6 @@ namespace ExplosionJumping.PlayerControl {
             dead = !alive;
             if (dead) {
                 charController.cam.transform.localPosition = new Vector3(0f, 0f, -5f);
-                //charController.head.cameraLook.Init(transform, charController.head.transform);
                 charController.cam.cullingMask |= 1 << LayerMask.NameToLayer("PlayerModel");
             }
             else {
