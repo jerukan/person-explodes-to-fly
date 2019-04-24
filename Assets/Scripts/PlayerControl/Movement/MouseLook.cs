@@ -14,6 +14,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         private bool m_cursorIsLocked = true;
 
+        public MouseLook() {}
+
         public MouseLook(CameraLook cameraLook) {
             this.cameraLook = cameraLook;
         }

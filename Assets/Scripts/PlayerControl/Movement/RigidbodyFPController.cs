@@ -12,8 +12,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
     [RequireComponent(typeof(PlayerAirController))]
     public class RigidbodyFPController : MonoBehaviour {
 
+        public PlayerHead head;
         public Camera cam;
-        public CameraLook cameraLook = new CameraLook();
 
         [Header("Basic movement")]
 
@@ -70,6 +70,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         public Vector3 Velocity {
             get { return rigidBody.velocity; }
+        }
+
+        public Vector3 HorizontalVelocity {
+            get { return new Vector3(Velocity.x, 0f, Velocity.z); }
         }
 
         public Vector3 ColliderBottom {
@@ -133,6 +137,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
             rigidBody.useGravity = false;
             rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
             rigidBody.isKinematic = false;
+            head = GetComponentInChildren<PlayerHead>();
+            cam = head.cam;
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.isTrigger = false;
             height = capsuleCollider.height;
@@ -142,7 +148,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void Start() {
-            cameraLook.Init(transform, cam.transform);
         }
 
         private void Update() {
@@ -270,11 +275,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 desiredHeight = capsuleCollider.radius * 2;
             }
             capsuleCollider.height = desiredHeight;
-        }
-
-        public void ResetCameraRotation() {
-            cam.transform.localEulerAngles = Vector3.zero;
-            cameraLook.Init(transform, cam.transform);
         }
 
         private void OnCollisionEnter(Collision collision) {

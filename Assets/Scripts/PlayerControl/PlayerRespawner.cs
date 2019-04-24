@@ -18,8 +18,8 @@ namespace ExplosionJumping.PlayerControl {
         void Awake() {
             playerController = GetComponent<PlayerController>();
             playerCamera = GetComponent<RigidbodyFPController>().cam;
-            coolMouseLook = new MouseLook(GetComponent<RigidbodyFPController>().cameraLook);
-            coolMouseLook.Init(transform, playerCamera.transform);
+            coolMouseLook = new MouseLook(GetComponent<RigidbodyFPController>().head.cameraLook);
+            coolMouseLook.Init(transform, GetComponent<RigidbodyFPController>().head.transform);
         }
 
         // Update is called once per frame
@@ -34,7 +34,7 @@ namespace ExplosionJumping.PlayerControl {
                 }
                 else {
                     if (!(Mathf.Abs(Time.timeScale) < float.Epsilon)) {
-                        coolMouseLook.LookRotation(transform, playerCamera.transform, false);
+                        coolMouseLook.LookRotation(transform, GetComponent<RigidbodyFPController>().head.transform, false);
                     }
                 }
             }

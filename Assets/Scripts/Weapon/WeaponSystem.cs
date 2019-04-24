@@ -2,6 +2,7 @@
 using System.Collections;
 using ExplosionJumping.PlayerControl;
 using ExplosionJumping.Util;
+using ExplosionJumping.PlayerControl.Movement;
 
 namespace ExplosionJumping.Weapon {
     [RequireComponent(typeof(PlayerController))]
@@ -26,7 +27,7 @@ namespace ExplosionJumping.Weapon {
                 weapons[i] = weaponInstance.GetComponent<WeaponController>();
                 weapons[i].owner = GetComponent<PlayerController>();
                 ToggleWeapon(i, false);
-                weapons[i].transform.SetParent(GetComponentInChildren<Camera>().transform);
+                weapons[i].transform.SetParent(GetComponentInChildren<PlayerHead>().transform);
                 weapons[i].transform.localPosition = weapons[i].weaponOffset;
             }
             currentWeaponIndex = 0;

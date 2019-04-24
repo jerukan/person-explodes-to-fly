@@ -3,10 +3,10 @@ using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.Movement {
     [RequireComponent(typeof(RigidbodyFPController))]
-    public class PlayerInput : MonoBehaviour {
+    public class PlayerMovementInput : MonoBehaviour {
 
         public KeyCode crouchKey = KeyCode.LeftControl;
-        public MouseLook mouseLook;
+        public MouseLook mouseLook = new MouseLook();
 
         private RigidbodyFPController charController;
         private Rigidbody rigidBody;
@@ -20,11 +20,11 @@ namespace ExplosionJumping.PlayerControl.Movement {
         private void Awake() {
             charController = GetComponent<RigidbodyFPController>();
             rigidBody = GetComponent<Rigidbody>();
-            mouseLook = new MouseLook(charController.cameraLook);
         }
 
         private void Start() {
-            mouseLook.Init(transform, charController.cam.transform);
+            mouseLook.cameraLook = charController.head.cameraLook;
+            mouseLook.Init(transform, charController.head.transform);
         }
 
         void Update() {
@@ -55,7 +55,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             // get the rotation before it's changed
             float oldYRotation = transform.eulerAngles.y;
 
-            mouseLook.LookRotation(transform, charController.cam.transform, true);
+            mouseLook.LookRotation(transform, charController.head.transform, true);
 
             if (charController.Grounded) {
                 // Rotate the rigidbody velocity to match the new direction that the character is looking

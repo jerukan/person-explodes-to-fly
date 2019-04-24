@@ -11,7 +11,6 @@ namespace ExplosionJumping.PlayerControl {
         public int maxHealth;
         [Tooltip("Health regenerated per second.")]
         public int healthRegen;
-        public Camera deathCamera;
 
         private RigidbodyFPController charController;
         private WeaponSystem weaponSystem;
@@ -36,20 +35,15 @@ namespace ExplosionJumping.PlayerControl {
             weaponSystem = GetComponent<WeaponSystem>();
             rigidBody = GetComponent<Rigidbody>();
             currentHealth = maxHealth;
-            deathCamera.enabled = false;
         }
 
         private void Update() {
             Transform camTransform = charController.cam.transform;
-            if(Input.GetKeyDown(KeyCode.LeftShift)) {
-                // todo make it not modified by vertical tilt
-                rigidBody.AddForce(camTransform.forward * 40, ForceMode.VelocityChange);
-            }
 
             if (!dead) {
                 AddHealth(healthRegen * Time.deltaTime);
             } else {
-                deathCamera.transform.position = transform.position - charController.cam.transform.forward * 4;
+                // dead
             }
         }
 
@@ -77,16 +71,22 @@ namespace ExplosionJumping.PlayerControl {
             }
             Ragdoll(!alive);
             dead = !alive;
-            deathCamera.enabled = !alive;
-            charController.cam.enabled = alive;
-            deathCamera.transform.eulerAngles = charController.cam.transform.eulerAngles;
-            charController.ResetCameraRotation();
+            if (dead) {
+                charController.cam.transform.localPosition = new Vector3(0f, 0f, -5f);
+                //charController.head.cameraLook.Init(transform, charController.head.transform);
+                charController.cam.cullingMask |= 1 << LayerMask.NameToLayer("PlayerModel");
+            }
+            else {
+                charController.cam.transform.localPosition = Vector3.zero;
+                charController.head.ResetHeadRotation();
+                charController.cam.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerModel"));
+            }
         }
 
         private void Ragdoll(bool shouldRagdoll) {
             charController.enabled = !shouldRagdoll; // disables player input and movement
-            if(GetComponent<PlayerInput>() != null) {
-                GetComponent<PlayerInput>().enabled = !shouldRagdoll;
+            if(GetComponent<PlayerMovementInput>() != null) {
+                GetComponent<PlayerMovementInput>().enabled = !shouldRagdoll;
             }
             rigidBody.useGravity = shouldRagdoll;
             if (shouldRagdoll) {
