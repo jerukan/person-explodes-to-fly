@@ -11,11 +11,16 @@ namespace ExplosionJumping.PlayerControl {
         public int maxHealth;
         [Tooltip("Health regenerated per second.")]
         public int healthRegen;
+        [Tooltip("When the player is hit by an enemy, health regen will be disabled for this time.")]
+        public float healthRegenDelay;
 
         private RigidbodyFPController charController;
         private WeaponSystem weaponSystem;
         private Rigidbody rigidBody;
         private float currentHealth;
+        private bool healthRegenDisabled;
+        private float timeLastDamaged;
+        private float timeLastHitByEnemy;
         private bool dead;
 
         public float CurrentHealth {
@@ -41,7 +46,13 @@ namespace ExplosionJumping.PlayerControl {
             Transform camTransform = charController.cam.transform;
 
             if (!dead) {
-                AddHealth(healthRegen * Time.deltaTime);
+                if (!healthRegenDisabled) {
+                    AddHealth(healthRegen * Time.deltaTime);
+                } else {
+                    if(Time.time - timeLastHitByEnemy >= healthRegenDelay) {
+                        healthRegenDisabled = false;
+                    }
+                }
             } else {
                 // dead
             }
@@ -63,6 +74,11 @@ namespace ExplosionJumping.PlayerControl {
 
         public void TakeDamageFromExplosion(Vector3 explosionPos, float explosionRadius, ExplosiveProjectileController projectileController) {
             AddHealth(-(explosionRadius - (explosionPos - GetComponent<CapsuleCollider>().ClosestPoint(explosionPos)).magnitude) / explosionRadius * projectileController.damage);
+            timeLastDamaged = Time.time;
+            if(projectileController.projectileOwner.GetInstanceID() != GetInstanceID()) {
+                healthRegenDisabled = true;
+                timeLastHitByEnemy = Time.time;
+            }
         }
 
         public void SetAlive(bool alive) {

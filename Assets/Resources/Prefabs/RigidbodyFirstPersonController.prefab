@@ -446,6 +446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 200
   healthRegen: 100
+  healthRegenDelay: 2
 --- !u!114 &114437883547269092
 MonoBehaviour:
   m_ObjectHideFlags: 1
