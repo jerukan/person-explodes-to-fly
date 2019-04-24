@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 114391502314979226}
   - component: {fileID: 114437883547269092}
   - component: {fileID: 114508855472955520}
+  - component: {fileID: 114145203885197520}
   - component: {fileID: 114081812441207190}
   - component: {fileID: 114175758182727334}
   - component: {fileID: 114762123195891280}
@@ -379,6 +380,19 @@ MonoBehaviour:
   currentTargetSpeed: 0
   currentTargetDirection: {x: 0, y: 0}
   currentTargetLookAngle: {x: 0, y: 0}
+--- !u!114 &114145203885197520
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830071249688946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebfcdf4f5a3414ff687a8524612793cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryFireButton: 323
+  secondaryFireButton: 324
 --- !u!114 &114175758182727334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -459,8 +473,6 @@ MonoBehaviour:
   weaponPrefabs:
   - {fileID: 114580479567636246, guid: 7827d3a98892b441b93a55e80e983783, type: 2}
   - {fileID: 114450041212092134, guid: 6e21b60bac73e4863bc3f9b8b3faf62b, type: 2}
-  primaryFireButton: 323
-  secondaryFireButton: 324
 --- !u!114 &114762123195891280
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -18,6 +18,9 @@ namespace ExplosionJumping.PlayerControl {
         void Awake() {
             playerController = GetComponent<PlayerController>();
             playerCamera = GetComponent<RigidbodyFPController>().cam;
+        }
+
+        private void Start() {
             coolMouseLook = new MouseLook(GetComponent<RigidbodyFPController>().head.cameraLook);
             coolMouseLook.Init(transform, GetComponent<RigidbodyFPController>().head.transform);
         }
