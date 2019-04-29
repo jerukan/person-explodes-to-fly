@@ -26,7 +26,6 @@ namespace ExplosionJumping.Environment {
         }
 
         private void OnTriggerEnter(Collider other) {
-            Debug.Log("something ");
             if (!messageQueue.CurrentMessage.text.Equals(message)) {
                 messageQueue.AddMessage(message, timeToDisplay, overrideOtherMessages);
             }
