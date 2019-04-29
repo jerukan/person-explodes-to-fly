@@ -4,6 +4,9 @@ using ExplosionJumping.PlayerControl;
 using UnityEngine.UI;
 
 namespace ExplosionJumping.UI {
+    /// <summary>
+    /// Updates all HUD elements related to displaying information about the player specifically.
+    /// </summary>
     public class PlayerHudManager : MonoBehaviour {
 
         public PlayerController playerController;
