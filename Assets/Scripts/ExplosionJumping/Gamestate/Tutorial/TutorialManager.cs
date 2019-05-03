@@ -6,7 +6,7 @@ using ExplosionJumping.UI;
 namespace ExplosionJumping.Gamestate.Tutorial {
     public class TutorialManager : MonoBehaviour {
 
-        private TutorialSequenceLibrary tutorialLibrary;
+        private TutorialSequenceLibrary tutorialLibrary = new TutorialSequenceLibrary();
 
         private TutorialSequence currentTutorialSequence;
         private MessageQueue messageQueue;
