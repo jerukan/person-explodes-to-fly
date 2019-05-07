@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace ExplosionJumping.Gamestate.Tutorial {
     public class TutorialSequence {
 
+        public readonly string name;
         private bool complete;
         public bool Complete {
             get { return complete; }
@@ -19,7 +20,8 @@ namespace ExplosionJumping.Gamestate.Tutorial {
             get { return CurrentCondition.GetState(); }
         }
 
-        public TutorialSequence(params TutorialCondition[] conditions) {
+        public TutorialSequence(string name, params TutorialCondition[] conditions) {
+            this.name = name;
             conditionSequence.AddRange(conditions);
         }
 

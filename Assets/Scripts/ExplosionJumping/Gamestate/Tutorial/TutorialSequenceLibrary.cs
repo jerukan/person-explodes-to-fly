@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using ExplosionJumping.PlayerControl.Movement;
+using UnityEngine;
 
 namespace ExplosionJumping.Gamestate.Tutorial {
     public class TutorialSequenceLibrary {
@@ -9,11 +11,19 @@ namespace ExplosionJumping.Gamestate.Tutorial {
                 "Pressanymovekey",
                 "Press on movement keys WASD to move.",
                 () => {
-                    return System.Math.Abs(Input.GetAxisRaw("Horizontal")) > float.Epsilon || System.Math.Abs(Input.GetAxisRaw("Vertical")) > float.Epsilon;
+                    return Math.Abs(Input.GetAxisRaw("Horizontal")) > float.Epsilon || Math.Abs(Input.GetAxisRaw("Vertical")) > float.Epsilon;
+                }
+            );
+            TutorialCondition playerJump = new TutorialCondition();
+            playerJump.Init(
+                "Pressjump",
+                "Press Space to jump",
+                () => {
+                    return GameObject.FindWithTag("Player").GetComponent<RigidbodyFPController>().Jumping;
                 }
             );
 
-            return new TutorialSequence(pressAnyMovementKey);
+            return new TutorialSequence("Basic movement tutorial", pressAnyMovementKey, playerJump);
         }
     }
 }

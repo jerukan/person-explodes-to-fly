@@ -108,8 +108,11 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public bool Jump {
             set {
                 jump = value;
-                if (!autoBunnyHop && !Grounded && jump) {
-                    ticksWhenJumpedInAir = totalTicksInAir;
+                if (jump) {
+                    Jumping = true;
+                    if (!autoBunnyHop && !Grounded) {
+                        ticksWhenJumpedInAir = totalTicksInAir;
+                    }
                 }
             }
         }
@@ -202,6 +205,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             if (Physics.SphereCast(transform.position, capsuleCollider.radius * 0.99f, Vector3.down, out hitInfo,
                                    ((capsuleCollider.height / 2f) - capsuleCollider.radius) + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore)) {
                 groundContactNormal = hitInfo.normal;
+                Jumping = false;
 
                 RaycastHit bottomHitInfo;
                 bottomGrounded = Physics.Raycast(transform.position, Vector3.down, out bottomHitInfo, capsuleCollider.height / 2f + groundCheckDistance, contactLayerMask, QueryTriggerInteraction.Ignore);
