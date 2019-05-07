@@ -108,11 +108,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public bool Jump {
             set {
                 jump = value;
-                if (jump) {
-                    Jumping = true;
-                    if (!autoBunnyHop && !Grounded) {
-                        ticksWhenJumpedInAir = totalTicksInAir;
-                    }
+                if (!autoBunnyHop && !Grounded && jump) {
+                    ticksWhenJumpedInAir = totalTicksInAir;
                 }
             }
         }
@@ -168,6 +165,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 if (jump) {
                     rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
                     rigidBody.AddForce(new Vector3(0f, jumpForce, 0f), ForceMode.VelocityChange);
+                    Jumping = true;
                 }
                 else if(ticksOnGround * Time.fixedDeltaTime > bunnyHopWindow / 2f) { // when completely grounded, ignore gravity and stick to ground
                     // also prevents normal ground movement until the bunnyhop window goes past.
