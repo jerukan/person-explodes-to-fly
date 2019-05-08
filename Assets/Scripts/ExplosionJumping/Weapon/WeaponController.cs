@@ -6,7 +6,8 @@ using ExplosionJumping.PlayerControl;
 namespace ExplosionJumping.Weapon {
     public class WeaponController : MonoBehaviour {
 
-        public GameObject projectile;
+        public string weaponName;
+        public GameObject primaryProjectile;
         public bool firesFromCamera;
         [Tooltip("The seconds between each shot.")]
         public float fireRatePrimary;
@@ -41,13 +42,18 @@ namespace ExplosionJumping.Weapon {
                 }
             }
             if (timeUntilNextShotSecondary > 0) {
-                // animator thing?
+                if (animator != null && !secondaryFired) {
+                    animator.SetBool("Fired", false);
+                }
+                else {
+                    secondaryFired = false;
+                }
             }
         }
 
         public void OnPrimaryFire() {
             if (timeUntilNextShotPrimary <= 0) {
-                Fire();
+                Fire(primaryProjectile);
                 timeUntilNextShotPrimary = fireRatePrimary;
                 primaryFired = true;
                 if (animator != null) {
@@ -59,7 +65,7 @@ namespace ExplosionJumping.Weapon {
         public void OnSecondaryFire() {
         }
 
-        public void Fire() {
+        public void Fire(GameObject projectileToSpawn) {
             Transform projectileSpawn;
             if (firesFromCamera) {
                 projectileSpawn = owner.transform.GetChild(0);
@@ -68,9 +74,8 @@ namespace ExplosionJumping.Weapon {
                 projectileSpawn = transform;
             }
 
-            GameObject spawned = Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
-            spawned.GetComponent<ExplosiveProjectileController>().projectileOwner = owner;
-            spawned.GetComponent<Rigidbody>().velocity = projectileSpawn.transform.forward * spawned.GetComponent<ExplosiveProjectileController>().speed;
+            GameObject spawned = Instantiate(projectileToSpawn, projectileSpawn.position, projectileSpawn.rotation);
+            spawned.GetComponent<ExplosiveProjectileController>().Init(owner, projectileSpawn.transform.forward);
         }
 
         public bool GetKeyModified(KeyCode key) {
