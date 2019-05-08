@@ -80,7 +80,6 @@ namespace ExplosionJumping.Weapon {
                     }
                 }
                 else {
-                    Debug.Log(weapons[i]);
                     indexToAdd = i;
                     break;
                 }
