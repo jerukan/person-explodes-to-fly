@@ -32,11 +32,13 @@ namespace ExplosionJumping.Weapon {
             int numberPressed = InputUtils.GetNumberPressed();
             weaponSystem.SetCurrentWeapon(numberPressed - 1);
 
-            if (weaponSystem.CurrentWeapon.GetKeyModified(primaryFireButton)) {
-                weaponSystem.CurrentWeapon.OnPrimaryFire();
-            }
-            if (weaponSystem.CurrentWeapon.GetKeyModified(secondaryFireButton)) {
-                weaponSystem.CurrentWeapon.OnSecondaryFire();
+            if (weaponSystem.CurrentWeapon != null) {
+                if (weaponSystem.CurrentWeapon.GetKeyModified(primaryFireButton)) {
+                    weaponSystem.CurrentWeapon.OnPrimaryFire();
+                }
+                if (weaponSystem.CurrentWeapon.GetKeyModified(secondaryFireButton)) {
+                    weaponSystem.CurrentWeapon.OnSecondaryFire();
+                }
             }
         }
     }

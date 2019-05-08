@@ -27,5 +27,10 @@ namespace ExplosionJumping.Weapon.Projectile {
         private void FixedUpdate() {
             rigidBody.AddForce(rigidBody.velocity.normalized * acceleration, ForceMode.Acceleration);
         }
+
+        public void Init(PlayerController owner, Vector3 direction) {
+            projectileOwner = owner;
+            rigidBody.velocity = direction * speed;
+        }
     }
 }
