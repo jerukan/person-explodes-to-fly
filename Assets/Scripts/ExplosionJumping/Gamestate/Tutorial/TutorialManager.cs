@@ -29,14 +29,11 @@ namespace ExplosionJumping.Gamestate.Tutorial {
         void Update() {
             if (currentTutorialSequence != null) {
                 lastState = currentTutorialSequence.Complete;
-                Utils.LogValue("Last state recorded", currentTutorialSequence.Complete);
                 if (!currentTutorialSequence.Complete) {
                     currentTutorialSequence.UpdateSequence();
-                    Utils.LogValue("Updated state recorded", currentTutorialSequence.Complete);
                     tutorialText.text = currentTutorialSequence.CurrentCondition.description;
                 }
                 if (!lastState) {
-                    Debug.Log("Finished sequence, logging time");
                     timeFinishedSequence = Time.time;
                 }
                 else {
