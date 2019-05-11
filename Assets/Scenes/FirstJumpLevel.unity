@@ -255,16 +255,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
       objectReference: {fileID: 0}
-    - target: {fileID: 54933190322676436, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     - target: {fileID: 114437883547269092, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
         type: 3}
       propertyPath: respawnPosition
       value: 
       objectReference: {fileID: 1105284627}
+    - target: {fileID: 54933190322676436, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 3}
 --- !u!114 &65102937 stripped
@@ -2359,7 +2359,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715a6301fc10a478e8be5a4e143bf5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: Hold ONLY the D key (no W) and move your mouse to the right while jumping.
+  message: Hold ONLY the D key (no W) and move your mouse steadily to the right while
+    jumping.
   timeToDisplay: 7
   overrideOtherMessages: 0
 --- !u!65 &758184845
@@ -6498,6 +6499,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7129966597517374599, guid: 40bddc298b03e4453ba96287eda32a2f,
+        type: 3}
+      propertyPath: tutorialOnStartup
+      value: BasicMovementTutorial
+      objectReference: {fileID: 0}
     - target: {fileID: 7129966597517374598, guid: 40bddc298b03e4453ba96287eda32a2f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6562,11 +6568,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129966597517374599, guid: 40bddc298b03e4453ba96287eda32a2f,
-        type: 3}
-      propertyPath: tutorialOnStartup
-      value: BasicMovementTutorial
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40bddc298b03e4453ba96287eda32a2f, type: 3}
@@ -7134,7 +7135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715a6301fc10a478e8be5a4e143bf5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: Hold ONLY the A key (no W) and move your mouse to the left while jumping.
+  message: Hold ONLY the A key (no W) and move your mouse steadily to the left while
+    jumping.
   timeToDisplay: 7
   overrideOtherMessages: 0
 --- !u!212 &207967125446561512
