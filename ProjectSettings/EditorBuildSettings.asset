@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Freestyle.unity
     guid: 1aeb93653087f4b52b30cd36699bf97f
+  - enabled: 1
+    path: Assets/Scenes/FirstRocketLevel.unity
+    guid: 0c6e002f30da94ef08b44fe9259487f5
+  - enabled: 1
+    path: Assets/Scenes/FirstJumpLevel.unity
+    guid: 1b00e89d7716443709052529c8525eb4
   m_configObjects: {}

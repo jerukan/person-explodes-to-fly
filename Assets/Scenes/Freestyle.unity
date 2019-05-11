@@ -392,6 +392,23 @@ PrefabInstance:
       propertyPath: respawnPosition
       value: 
       objectReference: {fileID: 1997207492}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 114580479567636246, guid: 7827d3a98892b441b93a55e80e983783,
+        type: 3}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 114450041212092134, guid: 6e21b60bac73e4863bc3f9b8b3faf62b,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 3}
 --- !u!1 &86229427

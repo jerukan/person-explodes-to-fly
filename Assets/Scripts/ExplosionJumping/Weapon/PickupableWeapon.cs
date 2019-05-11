@@ -7,13 +7,12 @@ namespace ExplosionJumping.Weapon {
 
         public WeaponController associatedWeapon;
 
-        public override void OnPickup(GameObject pickedUpBy) {
+        public override bool OnPickup(GameObject pickedUpBy) {
             WeaponSystem weaponSystem = pickedUpBy.GetComponent<WeaponSystem>();
             if (weaponSystem != null) {
-                if (weaponSystem.AddWeapon(associatedWeapon)) {
-                    Destroy(gameObject);
-                }
+                return weaponSystem.AddWeapon(associatedWeapon);
             }
+            return false;
         }
     }
 }

@@ -527,7 +527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linearAccelerationLimit: 1
-  linearAcceleration: 0.5
+  linearAcceleration: 1.5
 --- !u!114 &114834855372642138
 MonoBehaviour:
   m_ObjectHideFlags: 0

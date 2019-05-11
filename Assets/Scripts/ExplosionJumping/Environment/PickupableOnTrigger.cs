@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace ExplosionJumping.Environment {
     [RequireComponent(typeof(Collider))]
     public abstract class PickupableOnTrigger : MonoBehaviour, IPickupable {
+
+        public UnityEvent invokeOnSuccessfulPickup;
         
-        public abstract void OnPickup(GameObject pickedUpBy);
+        public abstract bool OnPickup(GameObject pickedUpBy);
 
         private void OnTriggerEnter(Collider other) {
-            OnPickup(other.gameObject);
+            if (OnPickup(other.gameObject)) {
+                invokeOnSuccessfulPickup.Invoke();
+                Destroy(gameObject);
+            }
         }
     }
 }
