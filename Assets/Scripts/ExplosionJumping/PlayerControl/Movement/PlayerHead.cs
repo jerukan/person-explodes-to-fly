@@ -23,7 +23,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         public void ResetHeadRotation() {
             transform.localEulerAngles = Vector3.zero;
-            cameraLook.Init(transform.parent, transform);
         }
     }
 }

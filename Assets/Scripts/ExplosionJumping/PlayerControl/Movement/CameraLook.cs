@@ -8,40 +8,28 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public bool clampVerticalRotation = true;
         public float MinimumX = -89F;
         public float MaximumX = 89F;
-        public bool smooth;
-        public float smoothTime = 5f;
 
-        private Quaternion m_CharacterTargetRot;
-        private Quaternion m_CameraTargetRot;
+        private Transform m_CharacterTargetRot;
+        private Transform m_CameraTargetRot;
 
         public void Init(Transform character, Transform camera) {
-            m_CharacterTargetRot = character.localRotation;
-            m_CameraTargetRot = camera.localRotation;
+            m_CharacterTargetRot = character;
+            m_CameraTargetRot = camera;
         }
 
-        public void LookRotation(Transform character, Transform camera, float xRotDelta, float yRotDelta, bool rotateCharacter) {
-            m_CharacterTargetRot *= Quaternion.Euler(0f, yRotDelta, 0f);
+        public void LookRotation(float xRotDelta, float yRotDelta, bool rotateCharacter) {
             if (rotateCharacter) {
-                m_CameraTargetRot *= Quaternion.Euler(-xRotDelta, 0f, 0f);
+                m_CameraTargetRot.Rotate(new Vector3(-xRotDelta, 0f, 0f), Space.Self);
             }
             else {
-                m_CameraTargetRot *= Quaternion.Euler(-xRotDelta, yRotDelta, 0f);
+                m_CameraTargetRot.Rotate(new Vector3(-xRotDelta, yRotDelta, 0f), Space.Self);
             }
 
-            if (clampVerticalRotation)
-                m_CameraTargetRot = ClampRotationAroundXAxis(m_CameraTargetRot);
-
-            if (smooth) {
-                character.localRotation = Quaternion.Slerp(character.localRotation, m_CharacterTargetRot,
-                    smoothTime * Time.deltaTime);
-                camera.localRotation = Quaternion.Slerp(camera.localRotation, m_CameraTargetRot,
-                    smoothTime * Time.deltaTime);
+            if (clampVerticalRotation) {
+                m_CameraTargetRot.localRotation = ClampRotationAroundXAxis(m_CameraTargetRot.localRotation);
             }
-            else {
-                if (rotateCharacter) {
-                    character.localRotation = m_CharacterTargetRot;
-                }
-                camera.localRotation = m_CameraTargetRot;
+            if (rotateCharacter) {
+                m_CharacterTargetRot.Rotate(new Vector3(0f, yRotDelta, 0f), Space.Self);
             }
         }
 

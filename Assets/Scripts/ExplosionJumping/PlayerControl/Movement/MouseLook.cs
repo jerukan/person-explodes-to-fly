@@ -7,7 +7,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
     /// </summary>
     [Serializable]
     public class MouseLook {
-        [HideInInspector] public CameraLook cameraLook;
+        public CameraLook cameraLook;
         public float XSensitivity = 2f;
         public float YSensitivity = 2f;
         public bool lockCursor = true;
@@ -24,11 +24,11 @@ namespace ExplosionJumping.PlayerControl.Movement {
             cameraLook.Init(character, camera);
         }
 
-        public void LookRotation(Transform character, Transform camera, bool rotateCharacter) {
+        public void LookRotation(bool rotateCharacter) {
             float yRot = Input.GetAxis("Mouse X") * XSensitivity;
             float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
 
-            cameraLook.LookRotation(character, camera, xRot, yRot, rotateCharacter);
+            cameraLook.LookRotation(xRot, yRot, rotateCharacter);
 
             UpdateCursorLock();
         }

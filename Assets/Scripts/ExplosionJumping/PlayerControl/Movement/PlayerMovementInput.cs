@@ -55,7 +55,7 @@ namespace ExplosionJumping.PlayerControl.Movement {
             // get the rotation before it's changed
             float oldYRotation = transform.eulerAngles.y;
 
-            mouseLook.LookRotation(transform, charController.head.transform, true);
+            mouseLook.LookRotation(true);
 
             if (charController.Grounded) {
                 // Rotate the rigidbody velocity to match the new direction that the character is looking

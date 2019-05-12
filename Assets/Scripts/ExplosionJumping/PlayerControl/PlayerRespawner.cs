@@ -37,7 +37,7 @@ namespace ExplosionJumping.PlayerControl {
                 }
                 else {
                     if (!(Mathf.Abs(Time.timeScale) < float.Epsilon)) {
-                        coolMouseLook.LookRotation(transform, GetComponent<RigidbodyFPController>().head.transform, false);
+                        coolMouseLook.LookRotation(false);
                     }
                 }
             }
