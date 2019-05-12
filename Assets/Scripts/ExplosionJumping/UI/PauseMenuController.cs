@@ -8,7 +8,7 @@ namespace ExplosionJumping.UI {
 
         public KeyCode pauseButton = KeyCode.Escape;
         public GameObject pauseMenu;
-        public static bool paused = false;
+        public bool paused = false;
 
         // Update is called once per frame
         void Update() {

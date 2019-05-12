@@ -3,6 +3,6 @@
 namespace ExplosionJumping.Environment {
     public interface IPickupable {
 
-        void OnPickup(GameObject pickedUpBy);
+        bool OnPickup(GameObject pickedUpBy);
     }
 }

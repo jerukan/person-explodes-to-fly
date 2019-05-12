@@ -18,20 +18,24 @@ namespace ExplosionJumping.PlayerControl {
         private WeaponSystem weaponSystem;
         private Rigidbody rigidBody;
         private float currentHealth;
-        private bool healthRegenDisabled;
-        private float timeLastDamaged;
-        private float timeLastHitByEnemy;
-        private bool dead;
-
         public float CurrentHealth {
             get {
                 return currentHealth;
             }
         }
-
+        private bool healthRegenDisabled;
+        private float timeLastDamaged;
+        private float timeLastHitByEnemy;
+        private bool dead;
         public bool Dead {
             get {
                 return dead;
+            }
+        }
+        private bool explosiveJumping;
+        public bool ExplosiveJumping {
+            get {
+                return explosiveJumping;
             }
         }
 
@@ -52,6 +56,9 @@ namespace ExplosionJumping.PlayerControl {
                     if(Time.time - timeLastHitByEnemy >= healthRegenDelay) {
                         healthRegenDisabled = false;
                     }
+                }
+                if(explosiveJumping && charController.Grounded) {
+                    explosiveJumping = false;
                 }
             } else {
                 // dead
@@ -79,6 +86,7 @@ namespace ExplosionJumping.PlayerControl {
                 healthRegenDisabled = true;
                 timeLastHitByEnemy = Time.time;
             }
+            explosiveJumping = true;
         }
 
         public void SetAlive(bool alive) {

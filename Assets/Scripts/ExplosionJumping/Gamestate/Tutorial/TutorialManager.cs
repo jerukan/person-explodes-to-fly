@@ -7,6 +7,8 @@ using UnityEngine.UI;
 namespace ExplosionJumping.Gamestate.Tutorial {
     public class TutorialManager : MonoBehaviour {
 
+        public string tutorialOnStartup;
+
         private TutorialSequenceLibrary tutorialLibrary = new TutorialSequenceLibrary();
 
         private TutorialSequence currentTutorialSequence;
@@ -16,32 +18,37 @@ namespace ExplosionJumping.Gamestate.Tutorial {
         private float timeFinishedSequence;
 
         void Awake() {
-            currentTutorialSequence = tutorialLibrary.BasicMovementTutorial();
+            currentTutorialSequence = tutorialLibrary.GetSequenceFromName(tutorialOnStartup);
         }
 
         private void Start() {
             tutorialText = GameObject.Find("TutorialPopup").GetComponent<Text>();
+            tutorialText.text = "";
         }
 
         void Update() {
-            if(currentTutorialSequence != null && !currentTutorialSequence.Complete) {
-                currentTutorialSequence.UpdateSequence();
-            }
-            if (currentTutorialSequence.Complete) {
-                if(!lastState) {
+            if (currentTutorialSequence != null) {
+                lastState = currentTutorialSequence.Complete;
+                if (!currentTutorialSequence.Complete) {
+                    currentTutorialSequence.UpdateSequence();
+                    tutorialText.text = currentTutorialSequence.CurrentCondition.description;
+                }
+                if (!lastState) {
                     timeFinishedSequence = Time.time;
                 }
-                if (Time.time - timeFinishedSequence >= 5f) {
-                    tutorialText.text = "";
-                }
                 else {
-                    tutorialText.text = $"{currentTutorialSequence.name} complete!";
+                    if (Time.time - timeFinishedSequence >= 5f) {
+                        tutorialText.text = "";
+                    }
+                    else {
+                        tutorialText.text = $"{currentTutorialSequence.name} complete!";
+                    }
                 }
             }
-            else {
-                tutorialText.text = currentTutorialSequence.CurrentCondition.description;
-            }
-            lastState = currentTutorialSequence.Complete;
+        }
+
+        public void SetTutorialFromName(string tutorialName) {
+            currentTutorialSequence = tutorialLibrary.GetSequenceFromName(tutorialName);
         }
     }
 }

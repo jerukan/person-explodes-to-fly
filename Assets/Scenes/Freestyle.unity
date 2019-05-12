@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.43695047, g: 0.4846236, b: 0.5648838, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -55,8 +55,8 @@ LightmapSettings:
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 12
-    m_Resolution: 2
-    m_BakeResolution: 40
+    m_Resolution: 1
+    m_BakeResolution: 20
     m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
@@ -74,10 +74,10 @@ LightmapSettings:
     m_MixedBakeMode: 2
     m_BakeBackend: 1
     m_PVRSampling: 1
-    m_PVRDirectSampleCount: 32
-    m_PVRSampleCount: 500
-    m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 500
+    m_PVRDirectSampleCount: 8
+    m_PVRSampleCount: 125
+    m_PVRBounces: 1
+    m_PVREnvironmentSampleCount: 125
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 2
     m_PVRDenoiserTypeDirect: 0
@@ -96,7 +96,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 40809507a67794a24aabcefe197a6719,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -392,6 +393,23 @@ PrefabInstance:
       propertyPath: respawnPosition
       value: 
       objectReference: {fileID: 1997207492}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 114580479567636246, guid: 7827d3a98892b441b93a55e80e983783,
+        type: 3}
+    - target: {fileID: 114508855472955520, guid: e3dc79d25e3684f4f937ff9ad6c291b2,
+        type: 3}
+      propertyPath: weaponPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 114450041212092134, guid: 6e21b60bac73e4863bc3f9b8b3faf62b,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3dc79d25e3684f4f937ff9ad6c291b2, type: 3}
 --- !u!1 &86229427
@@ -2712,7 +2730,7 @@ Light:
   serializedVersion: 9
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.9
+  m_Intensity: 0.6
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.802082
