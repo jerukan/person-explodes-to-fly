@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExplosionJumping.Environment {
+namespace ExplosionJumping.LevelEnvironment {
     public interface IPickupable {
 
         bool OnPickup(GameObject pickedUpBy);

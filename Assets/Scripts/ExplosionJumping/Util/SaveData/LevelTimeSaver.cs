@@ -23,7 +23,7 @@ namespace ExplosionJumping.Util.SaveData {
             using (StreamWriter streamWriter = File.CreateText(path)) {
                 streamWriter.Write(jsonString);
             }
-            Debug.Log($"Data written to {path}.");
+            Debug.Log($"Times for {levelName} written to {path}.");
         }
 
         public static LevelTimeData LoadData(string levelName) {

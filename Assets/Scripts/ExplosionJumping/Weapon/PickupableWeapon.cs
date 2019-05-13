@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using ExplosionJumping.Environment;
+using ExplosionJumping.LevelEnvironment;
 
 namespace ExplosionJumping.Weapon {
     public class PickupableWeapon : PickupableOnTrigger {

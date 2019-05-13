@@ -1,7 +1,7 @@
 ﻿using ExplosionJumping.PlayerControl;
 using UnityEngine;
 
-namespace ExplosionJumping.Environment {
+namespace ExplosionJumping.LevelEnvironment {
     [RequireComponent(typeof(Collider))]
     public class TriggerTeleporter : MonoBehaviour {
 

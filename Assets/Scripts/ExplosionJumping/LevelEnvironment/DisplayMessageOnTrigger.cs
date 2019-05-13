@@ -2,7 +2,7 @@
 using System.Collections;
 using ExplosionJumping.UI;
 
-namespace ExplosionJumping.Environment {
+namespace ExplosionJumping.LevelEnvironment {
     [RequireComponent(typeof(Collider))]
     public class DisplayMessageOnTrigger : MonoBehaviour {
 

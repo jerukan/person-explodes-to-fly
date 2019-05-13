@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Events;
 
-namespace ExplosionJumping.Environment {
+namespace ExplosionJumping.LevelEnvironment {
     [RequireComponent(typeof(Collider))]
     public abstract class PickupableOnTrigger : MonoBehaviour, IPickupable {
 
