@@ -6598,6 +6598,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 'You have finished the level.
 
+    Touch the cube to finish!
+
     Quit back to the main menu
 
     for more levels.'
@@ -6669,12 +6671,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1991539379}
-    characterCount: 72
+    characterCount: 98
     spriteCount: 0
-    spaceCount: 13
-    wordCount: 14
+    spaceCount: 18
+    wordCount: 19
     linkCount: 0
-    lineCount: 3
+    lineCount: 4
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -7471,6 +7473,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 72
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1097183206974797311
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1097183207746965116, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_Name
+      value: LevelCompleteCube
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 74.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 13.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -179.427
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1097183207746965111, guid: 8865f42a9383c4ed9ab09793bf86b020,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8865f42a9383c4ed9ab09793bf86b020, type: 3}
 --- !u!114 &1472771216634476059
 MonoBehaviour:
   m_ObjectHideFlags: 0
