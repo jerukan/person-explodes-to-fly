@@ -41,6 +41,7 @@ namespace ExplosionJumping.UI {
 
         public void AddMessage(Message message, bool overrideCurrentMessage) {
             if(overrideCurrentMessage) {
+                timeWhenDisplayed = Time.time;
                 currentMessage = message;
             } else {
                 messages.Enqueue(message);

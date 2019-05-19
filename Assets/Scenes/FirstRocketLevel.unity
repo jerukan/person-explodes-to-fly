@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Try shooting the rocket off the wall for even higher horizontal speed!
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!65 &443432876
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3509,7 +3509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Move forward and rocket jump at the same time.
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!65 &1254547788
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7700,7 +7700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Jump and shoot rockets at your feet to jump higher!
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!95 &1494123352504050109
 Animator:
   serializedVersion: 3
@@ -7938,7 +7938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Try shooting the rocket behind you for more horizontal speed.
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!95 &2153952140665798135
 Animator:
   serializedVersion: 3

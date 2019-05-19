@@ -871,7 +871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Try jumping around the glass wall!
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!65 &225635105
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2436,7 +2436,7 @@ MonoBehaviour:
   message: Hold ONLY the D key (no W) and move your mouse steadily to the right while
     jumping.
   timeToDisplay: 7
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!65 &758184845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6573,11 +6573,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7129966597517374599, guid: 40bddc298b03e4453ba96287eda32a2f,
-        type: 3}
-      propertyPath: tutorialOnStartup
-      value: BasicMovementTutorial
-      objectReference: {fileID: 0}
     - target: {fileID: 7129966597517374598, guid: 40bddc298b03e4453ba96287eda32a2f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6642,6 +6637,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129966597517374599, guid: 40bddc298b03e4453ba96287eda32a2f,
+        type: 3}
+      propertyPath: tutorialOnStartup
+      value: BasicMovementTutorial
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40bddc298b03e4453ba96287eda32a2f, type: 3}
@@ -7212,7 +7212,7 @@ MonoBehaviour:
   message: Hold ONLY the A key (no W) and move your mouse steadily to the left while
     jumping.
   timeToDisplay: 7
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!212 &207967125446561512
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7323,7 +7323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Don't be afraid, just walk forward and slide down!
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!95 &1354765759410852523
 Animator:
   serializedVersion: 3
@@ -7532,7 +7532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: Just jump over the gap, it's not that hard.
   timeToDisplay: 4
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!212 &4512715047034117038
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7614,7 +7614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   message: The air control here works just like in Source Engine games.
   timeToDisplay: 5
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!1001 &4971432347302382948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7928,7 +7928,7 @@ MonoBehaviour:
   message: Try using a combination of the previous air strafes to avoid the orange
     blocks!
   timeToDisplay: 6
-  overrideOtherMessages: 0
+  overrideOtherMessages: 1
 --- !u!95 &7991145434879095974
 Animator:
   serializedVersion: 3
