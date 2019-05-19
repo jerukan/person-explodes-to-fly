@@ -6,7 +6,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
     public class PlayerMovementInput : MonoBehaviour {
 
         public KeyCode crouchKey = KeyCode.LeftControl;
-        public MouseLook mouseLook = new MouseLook();
 
         private RigidbodyFPController charController;
         private Rigidbody rigidBody;
@@ -22,13 +21,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
             rigidBody = GetComponent<Rigidbody>();
         }
 
-        private void Start() {
-            mouseLook.cameraLook = charController.head.cameraLook;
-            mouseLook.Init(transform, charController.head.transform);
-        }
-
         void Update() {
-            RotateView();
+            //RotateView();
             GetInput();
             if (charController.autoBunnyHop) {
                 charController.Jump = Input.GetButton("Jump");
@@ -46,22 +40,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 x = Input.GetAxisRaw("Horizontal"),
                 y = Input.GetAxisRaw("Vertical")
             };
-        }
-
-        private void RotateView() {
-            // avoids the mouse looking if the game is effectively paused
-            if (Mathf.Abs(Time.timeScale) < float.Epsilon) return;
-
-            // get the rotation before it's changed
-            float oldYRotation = transform.eulerAngles.y;
-
-            mouseLook.LookRotation(true);
-
-            if (charController.Grounded) {
-                // Rotate the rigidbody velocity to match the new direction that the character is looking
-                Quaternion velRotation = Quaternion.AngleAxis(transform.eulerAngles.y - oldYRotation, Vector3.up);
-                rigidBody.velocity = velRotation * rigidBody.velocity;
-            }
         }
     }
 }

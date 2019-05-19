@@ -25,8 +25,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         public void LookRotation(bool rotateCharacter) {
-            float yRot = Input.GetAxis("Mouse X") * XSensitivity;
-            float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+            float yRot = Input.GetAxisRaw("Mouse X") * XSensitivity;
+            float xRot = Input.GetAxisRaw("Mouse Y") * YSensitivity;
+
+            Debug.Log(new Vector2(yRot, xRot));
 
             cameraLook.LookRotation(xRot, yRot, rotateCharacter);
 

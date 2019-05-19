@@ -9,27 +9,27 @@ namespace ExplosionJumping.PlayerControl.Movement {
         public float MinimumX = -89F;
         public float MaximumX = 89F;
 
-        private Transform m_CharacterTargetRot;
-        private Transform m_CameraTargetRot;
+        private Transform characterTransform;
+        private Transform cameraTransform; // Doesn't actually have to be the camera itself, maybe its parent or something.
 
         public void Init(Transform character, Transform camera) {
-            m_CharacterTargetRot = character;
-            m_CameraTargetRot = camera;
+            characterTransform = character;
+            cameraTransform = camera;
         }
 
         public void LookRotation(float xRotDelta, float yRotDelta, bool rotateCharacter) {
             if (rotateCharacter) {
-                m_CameraTargetRot.Rotate(new Vector3(-xRotDelta, 0f, 0f), Space.Self);
+                cameraTransform.Rotate(new Vector3(-xRotDelta, 0f, 0f), Space.Self);
             }
             else {
-                m_CameraTargetRot.Rotate(new Vector3(-xRotDelta, yRotDelta, 0f), Space.Self);
+                cameraTransform.Rotate(new Vector3(-xRotDelta, yRotDelta, 0f), Space.Self);
             }
 
             if (clampVerticalRotation) {
-                m_CameraTargetRot.localRotation = ClampRotationAroundXAxis(m_CameraTargetRot.localRotation);
+                cameraTransform.localRotation = ClampRotationAroundXAxis(cameraTransform.localRotation);
             }
             if (rotateCharacter) {
-                m_CharacterTargetRot.Rotate(new Vector3(0f, yRotDelta, 0f), Space.Self);
+                characterTransform.Rotate(new Vector3(0f, yRotDelta, 0f), Space.Self);
             }
         }
 

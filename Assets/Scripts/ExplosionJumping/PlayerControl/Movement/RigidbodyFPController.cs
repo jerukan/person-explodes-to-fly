@@ -137,8 +137,6 @@ namespace ExplosionJumping.PlayerControl.Movement {
             rigidBody.useGravity = false;
             rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
             rigidBody.isKinematic = false;
-            head = GetComponentInChildren<PlayerHead>();
-            cam = head.cam;
             capsuleCollider = GetComponent<CapsuleCollider>();
             capsuleCollider.isTrigger = false;
             height = capsuleCollider.height;
@@ -279,11 +277,11 @@ namespace ExplosionJumping.PlayerControl.Movement {
             capsuleCollider.height = desiredHeight;
         }
 
-        private void OnCollisionEnter(Collision collision) {
+        private void PerformAutoClimb(Collision collision) {
             ContactPoint highestContact = collision.contacts[0];
             // find highest point of contact to climb to
-            foreach(ContactPoint cp in collision.contacts) {
-                if(cp.point.y > highestContact.point.y) {
+            foreach (ContactPoint cp in collision.contacts) {
+                if (cp.point.y > highestContact.point.y) {
                     highestContact = cp;
                 }
             }
@@ -292,10 +290,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
             Vector3 contactDirection = highestContact.point - ColliderBottom;
             contactDirection.y = 0;
             // if the point to autoclimb to is part of a walkable slope, do nothing
-            if(Physics.Raycast(ColliderBottom, contactDirection, out bottomHit, capsuleCollider.radius, contactLayerMask, QueryTriggerInteraction.Ignore)) {
-                if(Vector3.Angle(Vector3.up, bottomHit.normal) < maxSlopeAllowed) {
+            if (Physics.Raycast(ColliderBottom, contactDirection, out bottomHit, capsuleCollider.radius, contactLayerMask, QueryTriggerInteraction.Ignore)) {
+                if (Vector3.Angle(Vector3.up, bottomHit.normal) < maxSlopeAllowed) {
                     return;
-                } 
+                }
             }
             RaycastHit highestContactHit; // check slope of the point to climb to
             Physics.Raycast(highestContact.point + new Vector3(0f, 0.1f, 0f), Vector3.down, out highestContactHit, 0.2f, contactLayerMask, QueryTriggerInteraction.Ignore);
@@ -304,6 +302,10 @@ namespace ExplosionJumping.PlayerControl.Movement {
                 ColliderBottom = highestContact.point;
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
             }
+        }
+
+        private void OnCollisionEnter(Collision collision) {
+            PerformAutoClimb(collision);
         }
     }
 }

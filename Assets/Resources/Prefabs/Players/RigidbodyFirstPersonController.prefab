@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4440803843462806}
   - component: {fileID: 114342701231250032}
+  - component: {fileID: 7940782880158903307}
   m_Layer: 9
   m_Name: PlayerHead
   m_TagString: Untagged
@@ -45,12 +46,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 20391502722244772}
-  cameraLook:
-    clampVerticalRotation: 1
-    MinimumX: -89
-    MaximumX: 89
-    smooth: 0
-    smoothTime: 5
+--- !u!114 &7940782880158903307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045040720708366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94be01cb95858461892e9369d785a167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clampInDegrees: {x: 360, y: 179}
+  lockCursor: 0
+  sensitivity: {x: 1.5, y: 1.5}
+  smoothing: {x: 1, y: 1}
+  targetDirection: {x: 0, y: 0}
+  targetCharacterDirection: {x: 0, y: 0}
+  characterBody: {fileID: 1830071249688946}
+  shouldRotateCharacterBody: 1
 --- !u!1 &1145021498028812
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69e76fe7d6f444a8ab2ee207a15a7667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
+  head: {fileID: 114342701231250032}
   cam: {fileID: 20391502722244772}
   forwardSpeed: 4
   backwardSpeed: 3.5
@@ -504,16 +519,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crouchKey: 306
-  mouseLook:
-    cameraLook:
-      clampVerticalRotation: 1
-      MinimumX: -89
-      MaximumX: 89
-      smooth: 0
-      smoothTime: 5
-    XSensitivity: 1.5
-    YSensitivity: 1.5
-    lockCursor: 1
 --- !u!114 &114762123195891280
 MonoBehaviour:
   m_ObjectHideFlags: 0

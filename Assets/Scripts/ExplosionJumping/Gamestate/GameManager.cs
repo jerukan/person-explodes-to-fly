@@ -19,7 +19,6 @@ namespace ExplosionJumping.Gamestate {
         }
 
         private void Awake() {
-            Time.timeScale = 1f;
             timeSceneLoaded = Time.time;
         }
 

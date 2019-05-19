@@ -13,7 +13,7 @@ namespace ExplosionJumping.PlayerControl {
         private bool prevState;
         private PlayerController playerController;
         private RigidbodyFPController charController;
-        private MouseLook coolMouseLook;
+        //private MouseLook coolMouseLook;
 
         void Awake() {
             playerController = GetComponent<PlayerController>();
@@ -21,23 +21,24 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         private void Start() {
-            coolMouseLook = new MouseLook(charController.head.cameraLook);
-            coolMouseLook.Init(transform, charController.head.transform);
+            //coolMouseLook = new MouseLook(charController.head.cameraLook);
+            //coolMouseLook.Init(transform, charController.head.transform);
         }
 
-        // Update is called once per frame
         void Update() {
             if(!prevState && playerController.Dead) {
                 timeOfDeath = Time.time;
             }
             if(prevState) {
                 if (Time.time - timeOfDeath >= respawnTime) {
+                    GetComponentInChildren<SmootherMouseLook>().shouldRotateCharacterBody = true;
                     playerController.SetAlive(true);
                     playerController.transform.position = respawnPosition.position;
                 }
                 else {
                     if (!(Mathf.Abs(Time.timeScale) < float.Epsilon)) {
-                        coolMouseLook.LookRotation(false);
+                        //coolMouseLook.LookRotation(false);
+                        GetComponentInChildren<SmootherMouseLook>().shouldRotateCharacterBody = false;
                     }
                 }
             }
