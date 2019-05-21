@@ -364,7 +364,7 @@ GameObject:
   - component: {fileID: 114762123195891280}
   - component: {fileID: 114834855372642138}
   m_Layer: 9
-  m_Name: RigidbodyFirstPersonController
+  m_Name: ThePlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -486,25 +486,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 114342701231250032}
-  cam: {fileID: 20391502722244772}
+  groundContactLayerNames:
+  - Default
   forwardSpeed: 4
   backwardSpeed: 3.5
   strafeSpeed: 4
   groundAccelerationRate: 0.2
-  crouchMultiplier: 0.5
+  crouchSpeedMultiplier: 0.5
   maxHorizontalSpeed: 100
   lowestSpeedPossible: 0.0001
+  terminalVelocity: 75
   jumpForce: 5
   gravityMultiplier: 1
   bunnyHopWindow: 0.1
   autoBunnyHop: 1
+  crouchHeightMultiplier: 0.5
   groundCheckDistance: 0.01
   maxSlopeAllowed: 45
   requiredVelocityToSlide: 10
   requiredAngleToSlide: 5
+  enableAutoClimb: 1
   autoClimbMaxHeight: 0.3
-  currentTargetSpeed: 0
-  currentTargetDirection: {x: 0, y: 0}
+  currentGroundTargetSpeed: 0
+  currentTargetMovementDirection: {x: 0, y: 0}
   currentTargetLookAngle: {x: 0, y: 0}
 --- !u!114 &114175758182727334
 MonoBehaviour:
@@ -549,3 +553,4 @@ MonoBehaviour:
     type: 3}
   dt: 0.3
   maxIterations: 100
+  verticalIndicatorOffset: 0.05

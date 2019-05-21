@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.Movement {
+    /// <summary>
+    /// Allows keyboard control of the player if this component is added.
+    /// </summary>
     [RequireComponent(typeof(RigidbodyFPController))]
+    [AddComponentMenu("Player Control/Input/Player Movement Input")]
     public class PlayerMovementInput : MonoBehaviour {
 
         public KeyCode crouchKey = KeyCode.LeftControl;
@@ -22,19 +25,18 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         void Update() {
-            //RotateView();
-            GetInput();
+            GetMovementInput();
             if (charController.autoBunnyHop) {
-                charController.Jump = Input.GetButton("Jump");
+                charController.ShouldJump = Input.GetButton("Jump");
             }
             else {
-                charController.Jump = Input.GetButtonDown("Jump");
+                charController.ShouldJump = Input.GetButtonDown("Jump");
             }
-            charController.Crouch = Input.GetKey(crouchKey);
-            charController.currentTargetDirection = currentInput;
+            charController.ShouldCrouch = Input.GetKey(crouchKey);
+            charController.currentTargetMovementDirection = currentInput;
         }
 
-        private void GetInput() {
+        private void GetMovementInput() {
             // raw axis makes keyboard actually work properly
             currentInput = new Vector2 {
                 x = Input.GetAxisRaw("Horizontal"),

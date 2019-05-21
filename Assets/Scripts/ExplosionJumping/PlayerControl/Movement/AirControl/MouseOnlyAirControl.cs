@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.Movement.AirControl {
     /// <summary>
     /// Player velocity is set to face whatever direction is being faced.
     /// </summary>
+    [AddComponentMenu("Player Control/Air Control/Mouse Only Air Control")]
     public class MouseOnlyAirControl : PlayerAirController {
 
         public override void AirStafe(Vector2 input) {

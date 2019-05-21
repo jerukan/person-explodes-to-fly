@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace ExplosionJumping.PlayerControl.Movement {
+    /// <summary>
+    /// Represents the gameobject, usually child, of the player that is the center of rotation for the camera.
+    /// </summary>
+    [AddComponentMenu("Player Control/Camera Control/Player Head")]
     public class PlayerHead : MonoBehaviour {
 
         public Camera cam;

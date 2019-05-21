@@ -19,7 +19,7 @@ namespace ExplosionJumping.PlayerControl.Movement.AirControl {
 
         // Use this for initialization
         private void Start() {
-            cam = GetComponent<RigidbodyFPController>().cam;
+            cam = GetComponent<RigidbodyFPController>().head.cam;
         }
 
         /// <summary>

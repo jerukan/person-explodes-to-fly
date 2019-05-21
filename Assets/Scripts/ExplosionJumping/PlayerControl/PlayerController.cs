@@ -47,9 +47,12 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         private void Update() {
-            Transform camTransform = charController.cam.transform;
+            Transform camTransform = charController.head.cam.transform;
 
             if (!dead) {
+                if(Input.GetKeyDown(KeyCode.LeftShift)) {
+                    rigidBody.AddForce(camTransform.forward * 20f, ForceMode.VelocityChange);
+                }
                 if (!healthRegenDisabled) {
                     AddHealth(healthRegen * Time.deltaTime);
                 } else {
@@ -96,13 +99,13 @@ namespace ExplosionJumping.PlayerControl {
             Ragdoll(!alive);
             dead = !alive;
             if (dead) {
-                charController.cam.transform.localPosition = new Vector3(0f, 0f, -5f);
-                charController.cam.cullingMask |= 1 << LayerMask.NameToLayer("PlayerModel");
+                charController.head.cam.transform.localPosition = new Vector3(0f, 0f, -5f);
+                charController.head.cam.cullingMask |= 1 << LayerMask.NameToLayer("PlayerModel");
             }
             else {
-                charController.cam.transform.localPosition = Vector3.zero;
+                charController.head.cam.transform.localPosition = Vector3.zero;
                 charController.head.ResetHeadRotation();
-                charController.cam.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerModel"));
+                charController.head.cam.cullingMask &= ~(1 << LayerMask.NameToLayer("PlayerModel"));
             }
         }
 

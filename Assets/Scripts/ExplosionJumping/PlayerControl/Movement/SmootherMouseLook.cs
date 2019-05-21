@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Ripped straight from https://forum.unity.com/threads/a-free-simple-smooth-mouselook.73117/
 /// </summary>
-[AddComponentMenu("Camera/Simple Smooth Mouse Look")]
+[AddComponentMenu("Player Control/Camera Control/Smoother Mouse Look")]
 public class SmootherMouseLook : MonoBehaviour {
 
     [Tooltip("Clamps each value from [-value, value]. X represents yaw and Y represents pitch.")]
@@ -95,7 +95,7 @@ public class SmootherMouseLook : MonoBehaviour {
         if(Input.GetKeyUp(KeyCode.Escape)) {
             cursorIsLocked = !cursorIsLocked;
         }
-        if(Input.GetKeyDown(KeyCode.Mouse0)) {
+        if(Input.GetKeyUp(KeyCode.Mouse0)) {
             cursorIsLocked = true;
         }
         if (cursorIsLocked) {

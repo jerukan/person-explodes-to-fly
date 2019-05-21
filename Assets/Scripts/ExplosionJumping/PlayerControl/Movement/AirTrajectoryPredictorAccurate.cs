@@ -1,24 +1,28 @@
 ﻿using UnityEngine;
-using System.Collections;
-using ExplosionJumping.Util;
 using ExplosionJumping.Util.Paths;
 
 namespace ExplosionJumping.PlayerControl.Movement {
 
     /// <summary>
     /// Uses an Euler approximation to find where the player will land in complex terrain.
-    /// Iteratively raycasts along the trajectory so it's slower.
+    /// Iteratively raycasts along the trajectory so it's marginally slower.
     /// </summary>
+    [RequireComponent(typeof(RigidbodyFPController))]
     public class AirTrajectoryPredictorAccurate : MonoBehaviour {
-        
+
+        [Tooltip("The gameobject used to visually indicate where the player will land.")]
         public GameObject landingIndicatorPrefab;
-        public float dt, maxIterations;
+        [Tooltip("The time in seconds the predictor should advance the trajectory prediction by every iteration.")]
+        public float dt = 0.3f;
+        [Tooltip("How many times the predictor will check for a collision.")]
+        public int maxIterations = 100;
+        [Tooltip("The distance the landing indicator itself will be translated up by so it doesn't clip into the ground.")]
+        public float verticalIndicatorOffset = 0.05f;
 
         private Vector3 predictedLandingSpot, colliderBottom;
         private float gravityMultiplier;
-        private CapsuleCollider capsuleCollider; // todo make it work with other colliders maybe
+        private Collider playerCollider;
         private Rigidbody rigidBody;
-        private bool hasRigidBody;
         private AirPath currentPath;
         private GameObject landingIndicator;
         private RigidbodyFPController controller;
@@ -28,9 +32,8 @@ namespace ExplosionJumping.PlayerControl.Movement {
         }
 
         private void Awake() {
-            capsuleCollider = GetComponent<CapsuleCollider>();
+            playerCollider = GetComponent<Collider>();
             rigidBody = GetComponent<Rigidbody>();
-            hasRigidBody = rigidBody != null;
             controller = GetComponent<RigidbodyFPController>();
             gravityMultiplier = controller.gravityMultiplier;
         }
@@ -41,24 +44,26 @@ namespace ExplosionJumping.PlayerControl.Movement {
 
         void FixedUpdate() {
             if (!controller.Grounded) {
-                Vector3 colliderWorldCenter = transform.TransformPoint(capsuleCollider.center);
-                colliderBottom = new Vector3(colliderWorldCenter.x, colliderWorldCenter.y - capsuleCollider.height / 2, colliderWorldCenter.z);
-                if (hasRigidBody) {
-                    UpdatePredictedLandingSpot(rigidBody.velocity);
-                }
+                landingIndicator.SetActive(true);
+                Vector3 colliderWorldCenter = playerCollider.bounds.center;
+                colliderBottom = new Vector3(colliderWorldCenter.x, playerCollider.bounds.min.y, colliderWorldCenter.z);
+                UpdatePredictedLandingSpot(rigidBody.velocity);
                 landingIndicator.transform.position = predictedLandingSpot;
-                landingIndicator.transform.Translate(new Vector3(0f, 0.05f, 0f), Space.World); // translate it a bit above so it isn't clipping with the ground
+                landingIndicator.transform.Translate(new Vector3(0f, verticalIndicatorOffset, 0f), Space.World);
+            }
+            else {
+                landingIndicator.SetActive(false);
             }
         }
 
         public void UpdatePredictedLandingSpot(Vector3 velocity) {
             currentPath = new AirPath(colliderBottom, velocity, Physics.gravity * gravityMultiplier);
-            RaycastHit hitinfo;
             Vector3 raycastDirection;
             float currentTime = 0f;
             for (int i = 0; i < maxIterations; i++) {
                 raycastDirection = currentPath.GetVelocity(currentTime);
-                if(Physics.Raycast(currentPath.GetPosition(currentTime), raycastDirection, out hitinfo, raycastDirection.magnitude * dt, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore)) {
+                if (Physics.Raycast(currentPath.GetPosition(currentTime), raycastDirection, out RaycastHit hitinfo,
+                                    raycastDirection.magnitude * dt, LayerMask.GetMask(controller.groundContactLayerNames), QueryTriggerInteraction.Ignore)) {
                     float timetoground = currentPath.GetTimeToGround((colliderBottom - hitinfo.point).y);
                     predictedLandingSpot = currentPath.GetPosition(timetoground);
                     break;
