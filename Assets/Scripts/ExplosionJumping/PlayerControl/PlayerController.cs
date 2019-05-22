@@ -1,11 +1,10 @@
-﻿using ExplosionJumping.PlayerControl.Movement;
-using ExplosionJumping.Util;
-using ExplosionJumping.Weapon;
-using ExplosionJumping.Weapon.Projectile;
+﻿using ExplosionJumping.PlayerControl.PlayerInput;
+using ExplosionJumping.Weapons;
+using ExplosionJumping.Weapons.Projectiles;
 using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl {
-    [RequireComponent(typeof(RigidbodyFPController))]
+    [RequireComponent(typeof(FirstPersonControllerCustom))]
     public class PlayerController : MonoBehaviour {
 
         public int maxHealth;
@@ -14,7 +13,7 @@ namespace ExplosionJumping.PlayerControl {
         [Tooltip("When the player is hit by an enemy, health regen will be disabled for this time.")]
         public float healthRegenDelay;
 
-        private RigidbodyFPController charController;
+        private FirstPersonControllerCustom charController;
         private WeaponSystem weaponSystem;
         private Rigidbody rigidBody;
         private float currentHealth;
@@ -40,7 +39,7 @@ namespace ExplosionJumping.PlayerControl {
         }
 
         private void Awake() {
-            charController = GetComponent<RigidbodyFPController>();
+            charController = GetComponent<FirstPersonControllerCustom>();
             weaponSystem = GetComponent<WeaponSystem>();
             rigidBody = GetComponent<Rigidbody>();
             currentHealth = maxHealth;

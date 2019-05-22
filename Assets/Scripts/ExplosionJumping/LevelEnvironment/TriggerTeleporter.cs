@@ -18,7 +18,7 @@ namespace ExplosionJumping.LevelEnvironment {
         }
 
         private void OnTriggerEnter(Collider other) {
-            if (other.GetComponent<PlayerController>() != null) {
+            if (other.GetComponent<PlayerController>() != null || other.GetComponent<CharacterController>() != null || other.GetComponent<Rigidbody>() != null) {
                 other.transform.position = targetTransform.position;
             }
         }

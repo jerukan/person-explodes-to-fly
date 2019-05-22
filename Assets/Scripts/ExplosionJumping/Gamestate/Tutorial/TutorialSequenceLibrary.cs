@@ -1,6 +1,5 @@
 ﻿using System;
 using ExplosionJumping.PlayerControl;
-using ExplosionJumping.PlayerControl.Movement;
 using UnityEngine;
 
 namespace ExplosionJumping.Gamestate.Tutorial {
@@ -31,11 +30,14 @@ namespace ExplosionJumping.Gamestate.Tutorial {
                 "playerJump",
                 "Press Space to jump",
                 () => {
-                    return GameObject.FindWithTag("Player").GetComponent<RigidbodyFPController>().Jumping;
+                    return GameObject.FindWithTag("Player").GetComponent<FirstPersonControllerCustom>().Jumping;
                 }
             );
 
-            return new TutorialSequence("Basic movement tutorial", pressAnyMovementKey, playerJump);
+            TutorialConditionTimed displayAutobunnyhop = new TutorialConditionTimed();
+            displayAutobunnyhop.Init("bunnyhopnice", "You can hold down the jump button to jump automatically and preserve momentum!", 5f, false);
+
+            return new TutorialSequence("Basic movement tutorial", pressAnyMovementKey, playerJump, displayAutobunnyhop);
         }
 
         public TutorialSequence BasicRocketTutorial() {
@@ -60,7 +62,7 @@ namespace ExplosionJumping.Gamestate.Tutorial {
                 "goodRocketJump",
                 "Jump and fire a rocket at the ground to propel yourself even further.",
                 () => {
-                    return GameObject.FindWithTag("Player").GetComponent<PlayerController>().ExplosiveJumping && GameObject.FindWithTag("Player").GetComponent<RigidbodyFPController>().Jumping;
+                    return GameObject.FindWithTag("Player").GetComponent<PlayerController>().ExplosiveJumping && GameObject.FindWithTag("Player").GetComponent<FirstPersonControllerCustom>().Jumping;
                 }
             );
 

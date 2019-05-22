@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using ExplosionJumping.Util;
-using ExplosionJumping.PlayerControl.Movement;
+﻿using ExplosionJumping.PlayerControl.CameraControl;
+using UnityEngine;
 
 namespace ExplosionJumping.PlayerControl {
     [RequireComponent(typeof(PlayerController))]
@@ -12,17 +10,11 @@ namespace ExplosionJumping.PlayerControl {
         private float timeOfDeath;
         private bool prevState;
         private PlayerController playerController;
-        private RigidbodyFPController charController;
-        //private MouseLook coolMouseLook;
+        private FirstPersonControllerCustom charController;
 
         void Awake() {
             playerController = GetComponent<PlayerController>();
-            charController = GetComponent<RigidbodyFPController>();
-        }
-
-        private void Start() {
-            //coolMouseLook = new MouseLook(charController.head.cameraLook);
-            //coolMouseLook.Init(transform, charController.head.transform);
+            charController = GetComponent<FirstPersonControllerCustom>();
         }
 
         void Update() {
@@ -37,7 +29,6 @@ namespace ExplosionJumping.PlayerControl {
                 }
                 else {
                     if (!(Mathf.Abs(Time.timeScale) < float.Epsilon)) {
-                        //coolMouseLook.LookRotation(false);
                         GetComponentInChildren<SmootherMouseLook>().shouldRotateCharacterBody = false;
                     }
                 }

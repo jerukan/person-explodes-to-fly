@@ -2,7 +2,6 @@
 using System.Collections;
 using ExplosionJumping.PlayerControl;
 using UnityEngine.UI;
-using ExplosionJumping.PlayerControl.Movement;
 
 namespace ExplosionJumping.UI {
     /// <summary>
@@ -16,7 +15,7 @@ namespace ExplosionJumping.UI {
         private Text healthNumber;
         private Text speedometer;
         private PlayerRespawner playerRespawner;
-        private RigidbodyFPController charController;
+        private FirstPersonControllerCustom charController;
         private GameObject respawnPanel;
         private Text respawnTimerText;
 
@@ -28,7 +27,7 @@ namespace ExplosionJumping.UI {
             healthSlider.maxValue = playerController.maxHealth;
             healthNumber = GameObject.Find("HealthNumber").GetComponent<Text>();
             playerRespawner = playerController.GetComponent<PlayerRespawner>();
-            charController = playerController.GetComponent<RigidbodyFPController>();
+            charController = playerController.GetComponent<FirstPersonControllerCustom>();
             respawnPanel = GameObject.Find("RespawnPanel");
             respawnTimerText = GameObject.Find("RespawnTimerText").GetComponent<Text>();
             speedometer = GameObject.Find("Speedometer").GetComponent<Text>();

@@ -35,7 +35,7 @@ namespace ExplosionJumping.Util.SaveData {
                     return JsonUtility.FromJson<LevelTimeData>(jsonString);
                 }
             }
-            catch(FileNotFoundException e) {
+            catch (FileNotFoundException) {
                 LevelTimeData ltd = new LevelTimeData();
                 ltd.levelName = levelName;
                 SaveData(ltd, SceneManager.GetActiveScene().name);
